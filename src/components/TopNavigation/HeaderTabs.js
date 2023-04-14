@@ -8,6 +8,10 @@ import PaymentsImage from '../../assets/images/money-check-dollar-solid.svg'
 import './HeaderTabs.css';
 import CreateJob from "../Screens/CreateJob.js/CreateJob";
 import ContainerStatus from "../Screens/ContainerStatus/ContainerStatus";
+import ExpensesScreen from "../Screens/ExpensesScreen/ExpensesScreen";
+import PaymentsScreen from "../Screens/PaymentsScreen/PaymentsScreen";
+import InvoiceTemplate from "../Template/InvoiceTemplate/InvoiceTemplate";
+import ContainedButton from "../ContainedButton/ContainedButton";
 
 const HeaderTabs = ({isMobile = false}) => {
 
@@ -46,9 +50,18 @@ const HeaderTabs = ({isMobile = false}) => {
       <img src={PaymentsImage} height={"20"} width={"20"} />
     )
   }
+
+  const onLogOut = () => {
+    window.sessionStorage.removeItem('login_token');
+    window.open(window.location.href,`_self`);
+  }
   
     return (
       <React.Fragment>
+        <div style={{position:'absolute',top:10,right:20,display:'flex',flexDirection:'column'}}>
+        <ContainedButton label={'Logout'} handleClick={onLogOut} />
+        <p>{`Login time : ${new Date()}`}</p>
+        </div>
         <Tabs
   value={value}
   onChange={onTabChange}
@@ -61,7 +74,10 @@ const HeaderTabs = ({isMobile = false}) => {
   <Tab icon={<PaymentsIcon />} iconPosition="end" label="Payments" value={5} />
 </Tabs>
     {value === 1 && <CreateJob isMobile={isMobile} />}
-    {value === 2 && <ContainerStatus />}
+    {value === 2 && <ContainerStatus isMobile={isMobile} />}
+    {value === 3 && <InvoiceTemplate isMobile={isMobile} />}
+    {value === 4 && <ExpensesScreen isMobile={isMobile} />}
+    {value === 5 && <PaymentsScreen isMobile={isMobile} />}
   </React.Fragment>
 
     )
