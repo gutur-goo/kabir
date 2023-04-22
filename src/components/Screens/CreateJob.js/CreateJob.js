@@ -25,37 +25,95 @@ import PopUp from "../../PopUp/PopUp";
 import ContainedButton from "../../ContainedButton/ContainedButton";
 import RadioButtons from "../../RadioButtons/RadioButtons";
 
-const CreateJob = ({isMobile}) => {
+const dummyCustomers = [
+  {
+    name: "VCL LLC",
+  },
+  { name: "DXB PPC" },
+  { name: "ABU DHABI LOGISTICS" },
+];
 
-  const [customerList,setCustomerList] = useState([]);
-  const [customer,setCustomer] = useState('');
-  const [jobNumber , setJobNumber] = useState('');
-  const [jobTypeList,setJobTypeList] = useState([]);
-  const [jobType , setJobType] = useState('');
-  const [referenceList,setReferenceList] = useState([]);
-  const [reference , setReference] = useState('');
-  const [remarks , setRemarks] = useState('');
-  const [container , setContainer] = useState('');
-  const [containerStatus , setContainerStatus] = useState('');
-  const [from , setFrom] = useState('');
-  const [to , setTo] = useState('');
-  const [rate , setRate] = useState('');
-  const [token , setToken] = useState('');
-  const [inspection , setInspection] = useState('');
-  const [mecrec , setMecrec] = useState('');
-  const [detention , setDetention] = useState('');
-  const [driverList , setDriverList] = useState([]);
-  const [vehicleList , setVehicleList] = useState([]);
-  const [vehicleIn , setVehicleIn] = useState('');
-  const [vehicleOut , setVehicleOut] = useState('');
-  const [driverIn , setDriverIn] = useState('');
-  const [driverOut , setDriverOut] = useState('');
-  const [transportList , setTransportList] = useState([]);
-  const [transport , setTransport] = useState('');
-  const [doValue , setDoValue] = useState('');
-  const [storage , setStorage] = useState('');
-  const [containerSize , setContainerSize] = useState('');
-  const [VAT , setVAT] = useState('5');
+const dummyJobTypes = [
+  {
+    name: "FLAT",
+  },
+  { name: "CONTAINER" },
+];
+
+const dummyReferences = [
+  {
+    name: "BROTHER",
+  },
+  { name: "AMIT" },
+];
+
+const dummyContainerStatus = [
+  {
+    name: "LANDED",
+  },
+  { name: "PULLED" },
+  { name: "COMPLETED" },
+];
+
+const dummyDrivers = [
+  {
+    name: "AMAN",
+  },
+  { name: "ANKIT" },
+  { name: "RAHUL" },
+];
+const dummyVehicles = [
+  {
+    name: "B4564DXB",
+  },
+  { name: "B4564DX1" },
+  { name: "B4564RNF" },
+];
+const dummyTransport = [
+  {
+    name: "TPR1",
+  },
+  { name: "TPR2" },
+  { name: "TPR3" },
+];
+const dummyContainerSize = [
+  {
+    name: "20",
+  },
+  { name: "40" },
+];
+
+const CreateJob = ({isMobile,editJob=false,rowData={},cancelCallBack=null}) => {
+
+  const [customerList,setCustomerList] = useState(dummyCustomers);
+  const [customer,setCustomer] = useState(editJob ? rowData.customer : '');
+  const [jobNumber , setJobNumber] = useState(editJob ? rowData.jobNumber : '');
+  const [jobTypeList,setJobTypeList] = useState(dummyJobTypes);
+  const [jobType , setJobType] = useState(editJob ? rowData.jobType : '');
+  const [referenceList,setReferenceList] = useState(dummyReferences);
+  const [reference , setReference] = useState(editJob ? rowData.reference : '');
+  const [remarks , setRemarks] = useState(editJob ? rowData.remarks : '');
+  const [container , setContainer] = useState(editJob ? rowData.container : '');
+  const [containerStatus , setContainerStatus] = useState(editJob ? rowData.containerStatus : '');
+  const [from , setFrom] = useState(editJob ? rowData.from : '');
+  const [to , setTo] = useState(editJob ? rowData.to : '');
+  const [rate , setRate] = useState(editJob ? rowData.rate : '');
+  const [token , setToken] = useState(editJob ? rowData.token : '');
+  const [inspection , setInspection] = useState(editJob ? rowData.inspection : '');
+  const [mecrec , setMecrec] = useState(editJob ? rowData.mecrec : '');
+  const [detention , setDetention] = useState(editJob ? rowData.detention : '');
+  const [driverList , setDriverList] = useState(dummyDrivers);
+  const [vehicleList , setVehicleList] = useState(dummyVehicles);
+  const [vehicleIn , setVehicleIn] = useState(editJob ? rowData.vehicleIn : '');
+  const [vehicleOut , setVehicleOut] = useState(editJob ? rowData.vehicleOut : '');
+  const [driverIn , setDriverIn] = useState(editJob ? rowData.driverIn : '');
+  const [driverOut , setDriverOut] = useState(editJob ? rowData.driverOut : '');
+  const [transportList , setTransportList] = useState(dummyTransport);
+  const [transport , setTransport] = useState(editJob ? rowData.transport : '');
+  const [doValue , setDoValue] = useState(editJob ? rowData.doValue : '');
+  const [storage , setStorage] = useState(editJob ? rowData.storage : '');
+  const [containerSize , setContainerSize] = useState(editJob ? rowData.containerSize : '');
+  const [VAT , setVAT] = useState(editJob ? rowData.VAT : '5');
   const [registerForStatus,setRegisterForStatus] = useState(false);
   const [showPopUp , setShowPopUp] = useState(false);
   const [popUpType,setPopUpType] = useState('');
@@ -74,7 +132,7 @@ const CreateJob = ({isMobile}) => {
 
   const OutlinedButton = ({label,Icon}) => {
     return (
-      <Button variant="outlined" startIcon={Icon ? <Icon style={{color:'white'}}/> : null} style={{marginLeft:10,marginTop:10,height:40,color:'white'}}>
+      <Button onClick={editJob ? cancelCallBack : null } variant="outlined" startIcon={Icon ? <Icon style={{color:'white'}}/> : null} style={{marginLeft:10,marginTop:10,height:40,color:'white'}}>
           {label}
       </Button>
     )
@@ -84,84 +142,82 @@ const CreateJob = ({isMobile}) => {
     return (
       <React.Fragment>
         <div style={{marginBottom:20}}>
-        <OutlinedButton label="Reset" Icon={ResetIcon} />
-        <ContainedButton label="Create Job" Icon={AddJobIcon} />
+        <OutlinedButton label={editJob ? "Cancel Edit" : "Reset"} Icon={ResetIcon} />
+        <ContainedButton handleClick={editJob ? () => {cancelCallBack();alert('Job Edited Successfully!!')} : () => {alert('Job Created Successfully!!');window.open(window.location.href,`_self`)} } label={editJob ? "Edit Job" : "Create Job"} Icon={AddJobIcon} />
         </div>
       </React.Fragment>
     );
   };
 
-  const CalenderSelect = ({label,handleChange}) => {
+  const CalenderSelect = ({label,handleChange,value}) => {
     return (
       <div style={{ marginTop: 10 , marginLeft : 30,backgroundColor:'white'}}>
       <LocalizationProvider dateAdapter={AdapterDayjs}>
       <DemoContainer components={['DatePicker']}>
-        <DatePicker label={label} onChange={e => {handleChange(e.$d)}} />
+        <DatePicker value={value} label={label} onChange={e => {handleChange(e.$d)}} />
       </DemoContainer>
     </LocalizationProvider>
     </div>
     )
   }
 
-  console.log("VAT ",registerForStatus)
-
   return (
     <React.Fragment>
       {showPopUp && <PopUp popUpType={popUpType} handleClick={() => setShowPopUp(false)}  />}
-      <img src={TruckIcon}  style={{width: '100%',height:'100%',opacity:0.9}} />
-    <div style={{position:'absolute',left:40,top:'21%'}}>
-    <h1 style={{marginLeft:20,color:'white'}}>CREATE A JOB!</h1>
+      {!editJob && <img src={TruckIcon}  style={{width: '100%',height:'100%',opacity:0.9}} />}
+    <div style={{position:'absolute',left:40,top:'21%',width:'100%'}}>
+    <h1 style={{marginLeft:20,color:'white'}}>{ editJob ? `EDIT THIS JOB!` : `CREATE A JOB!`}</h1>
     <div style={{ flexDirection : 'row' , display : 'flex'}}>
-      <DropDown label="Customer" handleChange={setCustomer} />
+      <DropDown label="Customer" value={customer} handleChange={setCustomer} data={customerList} />
       <div style={{marginTop:20}}>
-      <ContainedButton label="New Customer" handleClick={() => {setShowPopUp(true);setPopUpType('Customer')}} />
+      {!editJob && <ContainedButton label="New Customer" handleClick={() => {setShowPopUp(true);setPopUpType('Customer')}} />}
       </div>
-      <TextInput label="Job no." handleChange={setJobNumber}  />
-      <DropDown label="Job Type" handleChange={setJobType} />
+      <TextInput value={jobNumber} label="Job no." handleChange={setJobNumber}  />
+      <DropDown label="Job Type" value={jobType} data={jobTypeList} handleChange={setJobType} />
       <div style={{marginTop:20}}>
-      <ContainedButton label="New Job Type" handleClick={() => {setShowPopUp(true);setPopUpType('JobType')}} />
+      {!editJob && <ContainedButton label="New Job Type" handleClick={() => {setShowPopUp(true);setPopUpType('JobType')}} />}
       </div>
-      <DropDown label="Reference" handleChange={setReference} />
+      <DropDown label="Reference" value={reference} data={referenceList} handleChange={setReference} />
       <div style={{marginTop:20}}>
-      <ContainedButton label="New Reference" handleClick={() => {setShowPopUp(true);setPopUpType('Reference')}} />
+      {!editJob && <ContainedButton label="New Reference" handleClick={() => {setShowPopUp(true);setPopUpType('Reference')}} />}
       </div>
       </div>
       <div style={{ flexDirection : 'row' , display : 'flex'}}>
-      <TextInput label="Remarks" handleChange={setRemarks} />
-      <TextInput label="Container" handleChange={setContainer} />
-      <DropDown label="Container Status" handleChange={setContainerStatus} />
-      <TextInput label="From" handleChange={setFrom} />
-      <TextInput label="To" handleChange={setTo} />
+      <TextInput value={remarks} label="Remarks" handleChange={setRemarks} />
+      <TextInput value={container} label="Container" handleChange={setContainer} />
+      <DropDown data={dummyContainerStatus} value={containerStatus} label="Container Status" handleChange={setContainerStatus} />
+      <TextInput value={from} label="From" handleChange={setFrom} />
+      <TextInput value={to} label="To" handleChange={setTo} />
       </div>
       <div style={{ flexDirection : 'row' , display : 'flex'}}>
-      <TextInput label="Rate" handleChange={setRate} />
-      <TextInput label="Token" handleChange={setToken} />
-      <TextInput label="Inspection" handleChange={setInspection} />
-      <TextInput label="Mecrec" handleChange={setMecrec} />
-      <TextInput label="Detention" handleChange={setDetention} />
+      <TextInput value={rate} label="Rate" handleChange={setRate} />
+      <TextInput value={token} label="Token" handleChange={setToken} />
+      <TextInput value={inspection} label="Inspection" handleChange={setInspection} />
+      <TextInput value={mecrec} label="Mecrec" handleChange={setMecrec} />
+      <TextInput value={detention} label="Detention" handleChange={setDetention} />
       </div>
       <div style={{ flexDirection : 'row' , display : 'flex',marginLeft:20}}>
-      <ContainedButton label="New Driver" handleClick={() => {setShowPopUp(true);setPopUpType('Driver')}} />
-      <ContainedButton label="New Vehicle" handleClick={() => {setShowPopUp(true);setPopUpType('Vehicle')}} />
+      {!editJob && <ContainedButton label="New Driver" handleClick={() => {setShowPopUp(true);setPopUpType('Driver')}} />}
+      {!editJob && <ContainedButton label="New Vehicle" handleClick={() => {setShowPopUp(true);setPopUpType('Vehicle')}} />}
       </div>
       <div style={{ flexDirection : 'row' , display : 'flex'}}>
-      <DropDown label="Driver IN" handleChange={setDriverIn} />
-      <DropDown label="Vehicle IN" handleChange={setVehicleIn} />
-      <DropDown label="Driver OUT" handleChange={setDriverOut} />
-      <DropDown label="Vehicle OUT" handleChange={setVehicleOut} />
+      <DropDown data={driverList} value={driverIn} label="Driver IN" handleChange={setDriverIn} />
+      <DropDown data={vehicleList} value={vehicleIn} label="Vehicle IN" handleChange={setVehicleIn} />
+      <DropDown data={driverList} value={driverOut} label="Driver OUT" handleChange={setDriverOut} />
+      <DropDown data={vehicleList} value={vehicleOut} label="Vehicle OUT" handleChange={setVehicleOut} />
       </div>
       <div style={{ flexDirection : 'row' , display : 'flex'}}>
-      <DropDown label="Transport" handleChange={setTransport} />
+      <DropDown data={transportList} value={transport} label="Transport" handleChange={setTransport} />
       <div style={{marginTop:20}}>
-      <ContainedButton label="New Transport" handleClick={() => {setShowPopUp(true);setPopUpType('Transport')}} />
+      {!editJob && <ContainedButton label="New Transport" handleClick={() => {setShowPopUp(true);setPopUpType('Transport')}} />}
       </div>
-      <CalenderSelect label="DO Val" handleChange={setDoValue} />
-      <CalenderSelect label="Storage" handleChange={setStorage} />
-      <DropDown label="Container Size" handleChange={setContainerSize} />
+      <CalenderSelect value={doValue} label="DO Val" handleChange={setDoValue} />
+      <CalenderSelect value={storage} label="Storage" handleChange={setStorage} />
+      <DropDown data={dummyContainerSize} value={containerSize} label="Container Size" handleChange={setContainerSize} />
       </div>
       <div style={{display:'flex' , flexDirection : 'column' , marginLeft:20,marginTop:10}}>
-      <RadioButtons setVAT={setVAT} />
-      <FormControlLabel onChange={() => {setRegisterForStatus(!registerForStatus)}} style={{color:'white'}} control={<Checkbox style={{color:'white'}}/>} label="Register for Container Status" />
+      {!editJob && <RadioButtons value={VAT} setVAT={setVAT} />}
+      {!editJob && <FormControlLabel onChange={() => {setRegisterForStatus(!registerForStatus)}} style={{color:'white'}} control={<Checkbox style={{color:'white'}}/>} label="Register for Container Status" />}
       </div>
       <Buttons />
     </div>

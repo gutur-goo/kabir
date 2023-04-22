@@ -12,8 +12,10 @@ import ExpensesScreen from "../Screens/ExpensesScreen/ExpensesScreen";
 import PaymentsScreen from "../Screens/PaymentsScreen/PaymentsScreen";
 import InvoiceTemplate from "../Template/InvoiceTemplate/InvoiceTemplate";
 import ContainedButton from "../ContainedButton/ContainedButton";
+import AllJobs from "../Screens/AllJobs/AllJobs";
+import InvoiceScreen from "../Screens/InvoiceScreen/InvoiceScreen";
 
-const HeaderTabs = ({isMobile = false}) => {
+const HeaderTabs = ({isMobile = false,isAdmin=false}) => {
 
   const [value,setValue] = useState(1);
 
@@ -60,24 +62,26 @@ const HeaderTabs = ({isMobile = false}) => {
       <React.Fragment>
         <div style={{position:'absolute',top:10,right:20,display:'flex',flexDirection:'column'}}>
         <ContainedButton label={'Logout'} handleClick={onLogOut} />
-        <p>{`Login time : ${new Date()}`}</p>
+        {/* <p>{`Login time : ${new Date()}`}</p> */}
         </div>
         <Tabs
   value={value}
   onChange={onTabChange}
   aria-label="icon position tabs example"
 >
-  <Tab icon={<PlusIcon />} iconPosition="end" label="Create a job" value={1} />
-  <Tab icon={<ContainerIcon />} iconPosition="end" label="Container status" value={2} />
-  <Tab icon={<InvoiceIcon />} iconPosition="end" label="Invoicing" value={3} />
-  <Tab icon={<ExpenseIcon />} iconPosition="end" label="Expenses" value={4} />
-  <Tab icon={<PaymentsIcon />} iconPosition="end" label="Payments" value={5} />
+  <Tab icon={<ContainerIcon />} iconPosition="end" label="All Jobs" value={1} />
+  <Tab icon={<PlusIcon />} iconPosition="end" label="Create a job" value={2} />
+  <Tab icon={<ContainerIcon />} iconPosition="end" label="Container status" value={3} />
+  {isAdmin && <Tab icon={<InvoiceIcon />} iconPosition="end" label="Invoicing" value={4} />}
+  {isAdmin && <Tab icon={<ExpenseIcon />} iconPosition="end" label="Expenses" value={5} />}
+  {isAdmin && <Tab icon={<PaymentsIcon />} iconPosition="end" label="Payments" value={6} />}
 </Tabs>
-    {value === 1 && <CreateJob isMobile={isMobile} />}
-    {value === 2 && <ContainerStatus isMobile={isMobile} />}
-    {value === 3 && <InvoiceTemplate isMobile={isMobile} />}
-    {value === 4 && <ExpensesScreen isMobile={isMobile} />}
-    {value === 5 && <PaymentsScreen isMobile={isMobile} />}
+    {value === 1 && <AllJobs isMobile={isMobile} />}
+    {value === 2 && <CreateJob isMobile={isMobile} />}
+    {value === 3 && <ContainerStatus isMobile={isMobile} />}
+    {value === 4 && <InvoiceScreen isMobile={isMobile} />}
+    {value === 5 && <ExpensesScreen isMobile={isMobile} />}
+    {value === 6 && <PaymentsScreen isMobile={isMobile} />}
   </React.Fragment>
 
     )

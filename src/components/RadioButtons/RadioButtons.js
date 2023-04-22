@@ -1,7 +1,7 @@
 import { FormControl, FormControlLabel, FormLabel, Radio, RadioGroup } from "@mui/material";
 import React from "react";
 
-const RadioButtons = ({setVAT}) => {
+const RadioButtons = ({setVAT,value=null}) => {
     return (
       <FormControl>
   <FormLabel style={{color:'white'}} id="demo-radio-buttons-group-label">VAT</FormLabel>

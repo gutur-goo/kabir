@@ -7,22 +7,28 @@ import Typography from '@mui/material/Typography';
 import Container from '@mui/material/Container';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 import SatSahib from '../../../assets/images/satSahib.jpeg';
-import Logo from '../../../assets/images/logo.png';
+import Logo from '../../../assets/images/logo2.png';
 import { sha256 } from 'js-sha256';
 
 const theme = createTheme();
 
-export default function SignIn() {
+export default function SignIn(props) {
 
-  const hashedPass = sha256('kabiradmin2233_kabirtransportllc11625'+new Date().getDate() + new Date().getMonth());
+  const {hashedPassAdmin,hashedPassNormal} = props;
 
   const handleSubmit = (event) => {
     event.preventDefault();
     const data = new FormData(event.currentTarget);
     const hashedValue = sha256(data.get('email')+'_'+data.get('password')+new Date().getDate() + new Date().getMonth());
-    if(hashedValue === hashedPass)
+    if(hashedValue === hashedPassAdmin)
     {
-        window.sessionStorage.login_token = hashedValue
+        window.sessionStorage.login_token = hashedValue;
+        window.open(window.location.href,`_self`);
+    }
+    else
+    if(hashedValue === hashedPassNormal)
+    {
+        window.sessionStorage.login_token = hashedValue;
         window.open(window.location.href,`_self`);
     }
     else
@@ -44,13 +50,13 @@ export default function SignIn() {
           }}
         >
             <div style={{position:'absolute',left:'25%',top:'40%'}}>
-            <img src={SatSahib} width={"60%"} />
-          <Typography component="h1" variant="h5" style={{marginLeft:'17%'}}>
+            <img src={SatSahib} width={"40%"} />
+          <Typography component="h1" variant="h5" style={{marginLeft:'12%'}}>
             Sat Sahib
           </Typography>
             </div>
-          <Box component="form" onSubmit={handleSubmit} noValidate sx={{ mt: 1 }} style={{marginTop:'40%'}}>
-          <img src={Logo} width={'100%'} />
+          <Box component="form" onSubmit={handleSubmit} noValidate sx={{ mt: 1 }} style={{marginTop:'10%'}}>
+          <img src={Logo} width={'70%'} />
           <h1>Welcome to Kabir Transport LLC</h1>   
             <TextField
               margin="normal"

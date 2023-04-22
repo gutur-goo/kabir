@@ -1,6 +1,15 @@
 import React, { useState } from "react";
 import TextInput from "../TextInput/TextInput";
 import ContainedButton from "../ContainedButton/ContainedButton";
+import DropDown from "../DropDown/DropDown";
+
+const dummyContainerStatus = [
+    {
+      name: "LANDED",
+    },
+    { name: "PULLED" },
+    { name: "COMPLETED" },
+  ];
 
 const PopUp = ({ popUpType, handleClick}) => {
 
@@ -11,6 +20,7 @@ const PopUp = ({ popUpType, handleClick}) => {
     const [emiratesID,setEmiratesID] = useState('');
     const [driverID,setDriverID] = useState('');
     const [driverContact,setDriverContact] = useState('');
+    const [containerStatus,setContainerStatus] = useState('');
 
     return (
         <React.Fragment>
@@ -18,13 +28,18 @@ const PopUp = ({ popUpType, handleClick}) => {
         <div style={{backgroundColor:'white',position:'absolute',zIndex:6,width:'30%',height:null,left:'35%',top:'40%',borderRadius:4,padding:20}}>
         <div style={{display:'flex',alignItems:'center',flexDirection:'column'}}>
         <h3>{`Add a New ${popUpType}`}</h3>
-        <TextInput label={'Enter Name'} handleChange={setName} />
+        {popUpType != 'ContainerStatus' && <TextInput label={'Enter Name'} handleChange={setName} />}
         {popUpType == 'Customer' && <TextInput label={'Enter TRN Number'} handleChange={setTRN} /> }
         {popUpType == 'Customer' && <TextInput label={'Enter Customer Contact'} handleChange={setCustomerContact} /> }
         {popUpType == 'Customer' && <TextInput label={'Enter Customer Address'} handleChange={setCustomerAddress} /> }
         {popUpType == 'Driver' && <TextInput label={'Enter Emirates ID'} handleChange={setEmiratesID} /> }
         {popUpType == 'Driver' && <TextInput label={'Enter Driver ID'} handleChange={setDriverID} /> }
         {popUpType == 'Driver' && <TextInput label={'Enter Driver Contact'} handleChange={setDriverContact} /> }
+        {popUpType == 'ContainerStatus' && 
+        <div style={{width:'50%'}}>
+        <DropDown noCustomWidth={true} data={dummyContainerStatus} handleChange={setContainerStatus} label={'Edit Container Status'} />
+        </div>
+         }
         <ContainedButton label='Submit' />
         </div>
         </div>
