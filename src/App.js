@@ -29,10 +29,10 @@ function App() {
       <Routes>
         {/* <Route exact path='/' element={<React.Fragment><img src={Logo} width={"20%"} /><HeaderTabs isMobile={isMobile} /></React.Fragment>}></Route> */}
         <Route exact path='/' element={loggedState != 'loggedOut' ? <div style={{backgroundColor:'rgb(255,227,148)'}}><img src={Logo} style={{marginLeft:'43%',borderRadius:'70%'}} width={"10%"} /><HeaderTabs isMobile={isMobile} isAdmin={isAdmin} /></div> :  <SignIn hashedPassAdmin={hashedPassAdmin} hashedPassNormal={hashedPassNormal} />}></Route>
-        <Route exact path='/invoice' element={<InvoiceTemplate />}></Route>
+        {/* <Route exact path='/invoice' element={<InvoiceTemplate />}></Route>
         <Route exact path='/paymentrc' element={<PaymentReceiptTemplate />}></Route>
         <Route exact path='/supporting' element={<SupportingListTemplate />}></Route>
-        <Route exact path='/outstanding' element={<OutstandingTemplate />}></Route>
+        <Route exact path='/outstanding' element={<OutstandingTemplate />}></Route> */}
       </Routes>
     </BrowserRouter>
     </React.Fragment>
