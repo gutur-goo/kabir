@@ -3,7 +3,7 @@ import React from 'react';
 import './App.css';
 import HeaderTabs from './components/TopNavigation/HeaderTabs';
 import { BrowserRouter, Routes, Route, Link } from 'react-router-dom'
-import Logo from './assets/images/logo.png';
+import Logo from './assets/images/satSahib.jpeg';
 import InvoiceTemplate from './components/Template/InvoiceTemplate/InvoiceTemplate';
 import SignIn from './components/Screens/LoginScreen/LoginScreen';
 import { sha256 } from 'js-sha256';
@@ -28,7 +28,7 @@ function App() {
     than rendering all matching routes. */}
       <Routes>
         {/* <Route exact path='/' element={<React.Fragment><img src={Logo} width={"20%"} /><HeaderTabs isMobile={isMobile} /></React.Fragment>}></Route> */}
-        <Route exact path='/' element={loggedState != 'loggedOut' ? <React.Fragment><img src={Logo} width={"20%"} /><HeaderTabs isMobile={isMobile} isAdmin={isAdmin} /></React.Fragment> :  <SignIn hashedPassAdmin={hashedPassAdmin} hashedPassNormal={hashedPassNormal} />}></Route>
+        <Route exact path='/' element={loggedState != 'loggedOut' ? <div style={{backgroundColor:'rgb(255,227,148)'}}><img src={Logo} style={{marginLeft:'43%',borderRadius:'70%'}} width={"10%"} /><HeaderTabs isMobile={isMobile} isAdmin={isAdmin} /></div> :  <SignIn hashedPassAdmin={hashedPassAdmin} hashedPassNormal={hashedPassNormal} />}></Route>
         <Route exact path='/invoice' element={<InvoiceTemplate />}></Route>
         <Route exact path='/paymentrc' element={<PaymentReceiptTemplate />}></Route>
         <Route exact path='/supporting' element={<SupportingListTemplate />}></Route>

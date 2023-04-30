@@ -16,7 +16,7 @@ const DropDown = ({label,handleChange = () => {},value=null,data=[],noCustomWidt
           {
             data.map((item,index) => {
               return (
-                <MenuItem value={item.name}>{item.name}</MenuItem>
+                <MenuItem value={item.id}>{item.name || item.number}</MenuItem>
               )
             })
           }

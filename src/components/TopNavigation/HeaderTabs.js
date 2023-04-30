@@ -60,10 +60,11 @@ const HeaderTabs = ({isMobile = false,isAdmin=false}) => {
   
     return (
       <React.Fragment>
-        <div style={{position:'absolute',top:10,right:20,display:'flex',flexDirection:'column'}}>
+        <div style={{position:'absolute',top:20,right:20,display:'flex',flexDirection:'column'}}>
         <ContainedButton label={'Logout'} handleClick={onLogOut} />
         {/* <p>{`Login time : ${new Date()}`}</p> */}
         </div>
+        <div style={{backgroundColor:'orange'}}>
         <Tabs
   value={value}
   onChange={onTabChange}
@@ -76,12 +77,14 @@ const HeaderTabs = ({isMobile = false,isAdmin=false}) => {
   {isAdmin && <Tab icon={<ExpenseIcon />} iconPosition="end" label="Expenses" value={5} />}
   {isAdmin && <Tab icon={<PaymentsIcon />} iconPosition="end" label="Payments" value={6} />}
 </Tabs>
+</div>
     {value === 1 && <AllJobs isMobile={isMobile} />}
     {value === 2 && <CreateJob isMobile={isMobile} />}
     {value === 3 && <ContainerStatus isMobile={isMobile} />}
     {value === 4 && <InvoiceScreen isMobile={isMobile} />}
     {value === 5 && <ExpensesScreen isMobile={isMobile} />}
     {value === 6 && <PaymentsScreen isMobile={isMobile} />}
+    
   </React.Fragment>
 
     )

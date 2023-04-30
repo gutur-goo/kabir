@@ -2,115 +2,49 @@ import React, { useState, useEffect } from 'react'
 import { DataGrid , GridToolbar } from '@mui/x-data-grid'
 import EditJob from '../EditJob/EditJob';
 import PopUp from '../../PopUp/PopUp';
+import { getContainerStatus } from '../../../services/Actions';
+import { Backdrop, CircularProgress } from '@mui/material';
 
 const columns = [
-  { field: 'id', headerName: 'S No.' },
-  { field: 'customer', headerName: 'Customer' },
-  { field: 'jobNumber', headerName: 'Job Number' },
-  { field: 'container', headerName: 'Container' },
-  { field: 'containerStatus', headerName: 'Container Status' },
-  { field: 'from', headerName: 'From' },
-  { field: 'to', headerName: 'To' },
-  { field: 'driverIn', headerName: 'Driver IN' },
-  { field: 'vehicleIn', headerName: 'Vehicle IN' },
-  { field: 'driverOut', headerName: 'Driver OUT' },
-  { field: 'vehicleOut', headerName: 'Vehicle OUT' },
-  { field: 'rate', headerName: 'Rate' },
-  { field: 'doVal', headerName: 'DO Value' },
-  { field: 'storage', headerName: 'Storage' },
-  { field: 'containerSize', headerName: 'Container Size' },
-]
-
-const dummyData = [{ 
-    id:'1', 
-  customer: "VCL LLC",
-  jobNumber: "ABCDXYZ1234",
-  container: "GHJUKI8765",
-  containerStatus: "LANDED",
-  from: "DXB PORT",
-  to: "ABU DHABI",
-  rate: "400",
-  driverIn: "AMAN",
-  driverOut: "AMAN",
-  vehicleIn: "B4564DXB",
-  vehicleOut: "B4564DXB",
-  doVal: "20-04-2023",
-  storage: "22-04-2023",
-  containerSize: "40",
-},
-{ 
-  id:'2', 
-customer: "VCL LLC",
-jobNumber: "ABCDXYZ1234",
-container: "GHJUKI8765",
-containerStatus: "LANDED",
-from: "DXB PORT",
-to: "ABU DHABI",
-rate: "400",
-driverIn: "AMAN",
-driverOut: "AMAN",
-vehicleIn: "B4564DXB",
-vehicleOut: "B4564DXB",
-doVal: "20-04-2023",
-storage: "22-04-2023",
-containerSize: "40",
-},
-{ 
-    id:'3', 
-  customer: "VCL LLC",
-  jobNumber: "ABCDXYZ1234",
-  container: "GHJUKI8765",
-  containerStatus: "LANDED",
-  from: "DXB PORT",
-  to: "ABU DHABI",
-  rate: "400",
-  driverIn: "AMAN",
-  driverOut: "AMAN",
-  vehicleIn: "B4564DXB",
-  vehicleOut: "B4564DXB",
-  doVal: "20-04-2023",
-  storage: "22-04-2023",
-  containerSize: "40",
-},
-{ 
-  id:'4', 
-customer: "VCL LLC",
-jobNumber: "ABCDXYZ1234",
-container: "GHJUKI8765",
-containerStatus: "LANDED",
-from: "DXB PORT",
-to: "ABU DHABI",
-rate: "400",
-driverIn: "AMAN",
-driverOut: "AMAN",
-vehicleIn: "B4564DXB",
-vehicleOut: "B4564DXB",
-doVal: "20-04-2023",
-storage: "22-04-2023",
-containerSize: "40",
-},
-{ 
-  id:'5', 
-customer: "VCL LLC",
-jobNumber: "ABCDXYZ1234",
-container: "GHJUKI8765",
-containerStatus: "LANDED",
-from: "DXB PORT",
-to: "ABU DHABI",
-rate: "400",
-driverIn: "AMAN",
-driverOut: "AMAN",
-vehicleIn: "B4564DXB",
-vehicleOut: "B4564DXB",
-doVal: "20-04-2023",
-storage: "22-04-2023",
-containerSize: "40",
-}];
+  { field: "customerName", headerName: "Customer" },
+  { field: "jobNumber", headerName: "Job Number" },
+  { field: "jobTypeName", headerName: "Job Type" },
+  { field: "referenceName", headerName: "Reference" },
+  { field: "remarks", headerName: "Remarks" },
+  { field: "container", headerName: "Container" },
+  { field: "containerStatus", headerName: "Container Status" },
+  { field: "from", headerName: "From" },
+  { field: "to", headerName: "To" },
+  { field: "driverInName", headerName: "Driver IN" },
+  { field: "vehicleInName", headerName: "Vehicle IN" },
+  { field: "driverOutName", headerName: "Driver OUT" },
+  { field: "vehicleOutName", headerName: "Vehicle OUT" },
+  { field: "rate", headerName: "Rate" },
+  { field: "token", headerName: "Token" },
+  { field: "inspection", headerName: "Inspection" },
+  { field: "mecrec", headerName: "Mecrec" },
+  { field: "detention", headerName: "Detention" },
+  { field: "transporterName", headerName: "Transport" },
+  { field: "doVal", headerName: "DO Value" },
+  { field: "storage", headerName: "Storage" },
+  { field: "containerSize", headerName: "Container Size" },
+  { field: "includeVAT", headerName: "VAT" },
+];
 
 const ContainerStatus = () => {
 
+  useEffect(() => {
+    getContainerStatus().then(res => {
+      console.log("response ",res)
+      setContainersData(res?.data || []);  
+      setShowLoader(false);
+    })
+  },[])
+
   const [editContainerStatus,setEditContainerStatus] = useState(false);
   const [rowData,setRowData] = useState({});
+  const [containersData,setContainersData] = useState([]);
+  const [showLoader,setShowLoader] = useState(true);
 
   const handleRowClick = (e) => {
     setRowData(e.row);
@@ -119,17 +53,33 @@ const ContainerStatus = () => {
 
   return (
     <React.Fragment>
-    {editContainerStatus && <PopUp popUpType = {'ContainerStatus'} handleClick={() => {setEditContainerStatus(false)}} /> }
+      <Backdrop
+        sx={{ color: "#fff", zIndex: (theme) => theme.zIndex.drawer + 1 }}
+        open={showLoader}
+        // onClick={handleClose}
+      >
+        <CircularProgress color="inherit" />
+      </Backdrop>
+    {/* {editContainerStatus && <PopUp popUpType = {'ContainerStatus'} handleClick={() => {setEditContainerStatus(false)}} /> } */}
     <h1 style={{display:'flex',justifyContent:'center'}}>CONTAINER STATUS</h1>
     <div style={{ height: 700, width: '100%' }}>
       <DataGrid
+      initialState={{
+        filter: {
+          filterModel: {
+            items: [{ field: 'containerStatus', operator: 'isAnyOf', value: ['PULLED','PENDING','LANDED'] }],
+          },
+        },
+      }}
         onRowClick={handleRowClick}
-        rows={dummyData}
+        getRowId={(row) => row.jobId}
+        rows={containersData}
         columns={columns}
         pageSize={12}
         slots={{ toolbar: GridToolbar }}
       />
     </div>
+    {editContainerStatus && <EditJob rowData={rowData} setEditJob={setEditContainerStatus}/> }
     </React.Fragment>
   )
 }

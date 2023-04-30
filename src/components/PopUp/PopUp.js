@@ -11,7 +11,7 @@ const dummyContainerStatus = [
     { name: "COMPLETED" },
   ];
 
-const PopUp = ({ popUpType, handleClick}) => {
+const PopUp = ({ popUpType, handleClick,manageNewEntries}) => {
 
     const [name,setName] = useState('');
     const [TRN,setTRN] = useState('');
@@ -21,6 +21,21 @@ const PopUp = ({ popUpType, handleClick}) => {
     const [driverID,setDriverID] = useState('');
     const [driverContact,setDriverContact] = useState('');
     const [containerStatus,setContainerStatus] = useState('');
+
+    const submitData = () => {
+      const data = {
+        name : name,
+        TRN : TRN,
+        customerContact : customerContact,
+        customerAddress : customerAddress,
+        emiratesID : emiratesID,
+        driverID : driverID,
+        driverContact : driverContact,
+        containerStatus : containerStatus
+      }
+      manageNewEntries(data);
+      handleClick();
+    }
 
     return (
         <React.Fragment>
@@ -40,7 +55,7 @@ const PopUp = ({ popUpType, handleClick}) => {
         <DropDown noCustomWidth={true} data={dummyContainerStatus} handleChange={setContainerStatus} label={'Edit Container Status'} />
         </div>
          }
-        <ContainedButton label='Submit' />
+        <ContainedButton handleClick={submitData} label='Submit' />
         </div>
         </div>
         </React.Fragment>
