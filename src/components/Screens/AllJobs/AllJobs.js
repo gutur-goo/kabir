@@ -32,7 +32,7 @@ const columns = [
   { field: "includeVAT", headerName: "VAT" },
 ];
 
-const AllJobs = () => {
+const AllJobs = ({isMobile = false}) => {
   useEffect(() => {
     getAllJobsData()
       .then((res) => {
@@ -74,7 +74,7 @@ const AllJobs = () => {
           slots={{ toolbar: GridToolbar }}
         />
       </div>
-      {editJob && <EditJob rowData={rowData} setEditJob={setEditJob} />}
+      {editJob && <EditJob isMobile={isMobile} rowData={rowData} setEditJob={setEditJob} />}
     </React.Fragment>
   );
 };

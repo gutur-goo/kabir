@@ -64,7 +64,7 @@ const HeaderTabs = ({isMobile = false,isAdmin=false}) => {
         <ContainedButton label={'Logout'} handleClick={onLogOut} />
         {/* <p>{`Login time : ${new Date()}`}</p> */}
         </div>
-        <div style={{backgroundColor:'orange'}}>
+        <div style={{backgroundColor:'orange',overflow:'auto',whiteSpace:'nowrap'}}>
         <Tabs
   value={value}
   onChange={onTabChange}

@@ -75,7 +75,7 @@ const dummyContainerSize = [
 ];
 
 const CreateJob = ({
-  isMobile,
+  isMobile = false,
   editJob = false,
   rowData = {},
   cancelCallBack = null,
@@ -293,7 +293,7 @@ const CreateJob = ({
   const Buttons = () => {
     return (
       <React.Fragment>
-        <div style={{ marginTop: 20, marginLeft: 20 }}>
+        <div style={{ marginTop: 20, marginLeft: 20, marginBottom:20 }}>
           {editJob && (
             <ContainedButton
               handleClick={cancelCallBack}
@@ -313,7 +313,7 @@ const CreateJob = ({
 
   const CalenderSelect = ({ label, handleChange, value }) => {
     return (
-      <div style={{ marginTop: 10, marginLeft: 30, backgroundColor: "white" }}>
+      <div style={{ marginTop: 10, marginLeft: 30, backgroundColor: "white" }} >
         <LocalizationProvider dateAdapter={AdapterDayjs}>
           <DemoContainer components={["DatePicker"]}>
             <DatePicker
@@ -333,6 +333,15 @@ const CreateJob = ({
     return <img src={PlusImage} height={"20"} width={"20"} />;
   };
 
+  const scrollToTop = () =>{
+    window.scrollTo({
+      top: 0, 
+      behavior: 'smooth'
+      /* you can also use 'auto' behaviour
+         in place of 'smooth' */
+    });
+  };
+
   return (
     <React.Fragment>
       <Backdrop
@@ -343,9 +352,272 @@ const CreateJob = ({
         <CircularProgress color="inherit" />
       </Backdrop>
       {showPopUp && (
-        <PopUp popUpType={popUpType} handleClick={() => setShowPopUp(false)} manageNewEntries={manageNewEntries} />
+        <PopUp isMobile={isMobile} popUpType={popUpType} handleClick={() => setShowPopUp(false)} manageNewEntries={manageNewEntries} />
       )}
       {/* {!editJob && <img src={TruckIcon}  style={{width: '100%',height:'100%',opacity:0.9}} />} */}
+      {isMobile ? 
+        <div>
+        <h1 style={{ marginLeft: 20 }}>
+          {editJob ? `EDIT THIS JOB!` : `CREATE A JOB!`}
+        </h1>
+        <div style={{ flexDirection: "row", display: "flex" ,width:'500%'}}>
+          {!editJob && (
+            <DropDown
+              label="Customer"
+              value={customer}
+              handleChange={setCustomer}
+              data={customerList}
+            />
+          )}
+          <div style={{ marginTop: 20 }}>
+            {!editJob && (
+              <ContainedButton
+                Icon={PlusIcon}
+                handleClick={() => {
+                  scrollToTop();
+                  setShowPopUp(true);
+                  setPopUpType("Customer");
+                }}
+              />
+            )}
+          </div>
+          </div>
+          <div style={{ flexDirection: "row", display: "flex" ,width:'500%'}}>
+          <DropDown
+            label="Job Type"
+            value={jobType}
+            data={jobTypeList}
+            handleChange={setJobType}
+          />
+          <div style={{ marginTop: 20 }}>
+            {!editJob && (
+              <ContainedButton
+                Icon={PlusIcon}
+                handleClick={() => {
+                  setShowPopUp(true);
+                  setPopUpType("JobType");
+                }}
+              />
+            )}
+          </div>
+          </div>
+          <div style={{width:'60%'}}>
+          <TextInput
+            value={jobNumber}
+            label="Job no."
+            handleChange={setJobNumber}
+          />
+          </div>
+          <div style={{ flexDirection: "row", display: "flex" , width:'500%' }}>
+          <DropDown
+            label="Reference"
+            value={reference}
+            data={referenceList}
+            handleChange={setReference}
+          />
+          <div style={{ marginTop: 20 }}>
+            {!editJob && (
+              <ContainedButton
+                Icon={PlusIcon}
+                handleClick={() => {
+                  scrollToTop();
+                  setShowPopUp(true);
+                  setPopUpType("Reference");
+                }}
+              />
+            )}
+          </div>
+        </div>
+        <div style={{width:'60%'}}>
+        <TextInput
+            value={container}
+            label="Container"
+            handleChange={setContainer}
+          />
+          </div>
+          <div style={{width:'500%'}}>
+          <DropDown
+            data={dummyContainerStatus}
+            value={containerStatus}
+            label="Container Status"
+            handleChange={setContainerStatus}
+          />
+          <DropDown
+            data={dummyContainerSize}
+            value={containerSize}
+            label="Container Size"
+            handleChange={setContainerSize}
+          />
+          </div>
+          <div style={{width:'60%'}}>
+          <CalenderSelect
+            value={doValue}
+            label="DO Val"
+            handleChange={setDoValue}
+          />
+          <CalenderSelect
+            value={storage}
+            label="Storage"
+            handleChange={setStorage}
+          />
+          </div>
+          <div style={{width:'60%'}}>
+          <TextInput
+            value={remarks}
+            label="Remarks"
+            handleChange={setRemarks}
+          />
+          </div>
+        <div style={{ flexDirection: "row", display: "flex",width:'500%' }}>
+          <DropDown
+            data={pickDropData}
+            value={from}
+            label="From"
+            handleChange={setFrom}
+          />
+          <div style={{ marginTop: 20 }}>
+            {!editJob && (
+              <ContainedButton
+                Icon={PlusIcon}
+                handleClick={() => {
+                  scrollToTop();
+                  setShowPopUp(true);
+                  setPopUpType("Pick-up/Drop Location");
+                }}
+              />
+            )}
+          </div>
+          </div>
+          <div style={{width:'500%'}}>
+          <DropDown
+            data={pickDropData}
+            value={to}
+            label="To"
+            handleChange={setTo}
+          />
+          </div>
+           <div style={{ flexDirection: "row", display: "flex",width:'500%' }}>
+          <DropDown
+            data={transportList}
+            value={transport}
+            label="Transport"
+            handleChange={setTransport}
+          />
+          <div style={{ marginTop: 20 }}>
+            {!editJob && (
+              <ContainedButton
+                Icon={PlusIcon}
+                handleClick={() => {
+                  scrollToTop();
+                  setShowPopUp(true);
+                  setPopUpType("Transport");
+                }}
+              />
+            )}
+          </div>
+        </div>
+        <div style={{ flexDirection: "column", display: "flex" , width:'60%' }}>
+          <TextInput value={rate} label="Rate" handleChange={setRate} />
+          <TextInput value={token} label="Token" handleChange={setToken} />
+          <TextInput
+            value={inspection}
+            label="Inspection"
+            handleChange={setInspection}
+          />
+          <TextInput value={mecrec} label="Mecrec" handleChange={setMecrec} />
+          <TextInput
+            value={detention}
+            label="Detention"
+            handleChange={setDetention}
+          />
+        </div>
+        <div style={{ flexDirection: "row", display: "flex",width:'500%' }}>
+          <DropDown
+            data={driverList}
+            value={driverIn}
+            label="Driver IN"
+            handleChange={setDriverIn}
+          />
+          <div style={{ marginTop: 20 }}>
+            {!editJob && (
+              <ContainedButton
+                Icon={PlusIcon}
+                handleClick={() => {
+                  scrollToTop();
+                  setShowPopUp(true);
+                  setPopUpType("Driver");
+                }}
+              />
+            )}
+          </div>
+          </div>
+          <div style={{width:'500%'}}>
+          <DropDown
+            data={driverList}
+            value={driverOut}
+            label="Driver OUT"
+            handleChange={setDriverOut}
+          />
+          </div>
+          <div style={{ flexDirection: "row", display: "flex",width:'500%' }}>
+          <DropDown
+            data={vehicleList}
+            value={vehicleIn}
+            label="Vehicle IN"
+            handleChange={setVehicleIn}
+          />
+          <div style={{ marginTop: 20 }}>
+            {!editJob && (
+              <ContainedButton
+                Icon={PlusIcon}
+                handleClick={() => {
+                  scrollToTop();
+                  setShowPopUp(true);
+                  setPopUpType("Vehicle");
+                }}
+              />
+            )}
+          </div>
+          </div>
+          <div style={{width:'500%'}}>
+          <DropDown
+            data={vehicleList}
+            value={vehicleOut}
+            label="Vehicle OUT"
+            handleChange={setVehicleOut}
+          />
+          </div>
+          <div style={{width:'60%'}}>
+          <TextInput
+            value={driverCommision}
+            label="Driver Comission"
+            handleChange={setDriverComission}
+          />
+          </div>
+        <div style={{ display: "flex", flexDirection: "column", marginTop: 10,width:'500%' }}>
+          {!editJob && (
+            <DropDown
+              label={"VAT"}
+              data={dummyVATList}
+              handleChange={setVAT}
+              value={VAT}
+            />
+          )}
+          {!editJob && (
+            <div style={{ marginLeft: 30, marginTop: 25 }}>
+              <FormControlLabel
+                onChange={() => {
+                  setRegisterForStatus(!registerForStatus);
+                }}
+                control={<Checkbox />}
+                label="Register for Container Status"
+              />
+            </div>
+          )}
+        </div>
+        <Buttons />
+      </div>
+      :
       <div style={{ height: 800 }}>
         <h1 style={{ marginLeft: 20 }}>
           {editJob ? `EDIT THIS JOB!` : `CREATE A JOB!`}
@@ -576,7 +848,7 @@ const CreateJob = ({
           )}
         </div>
         <Buttons />
-      </div>
+      </div>}
     </React.Fragment>
   );
 };

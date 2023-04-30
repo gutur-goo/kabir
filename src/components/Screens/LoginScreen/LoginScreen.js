@@ -14,7 +14,7 @@ const theme = createTheme();
 
 export default function SignIn(props) {
 
-  const {hashedPassAdmin,hashedPassNormal} = props;
+  const {hashedPassAdmin,hashedPassNormal,isMobile = false} = props;
 
   const handleSubmit = (event) => {
     event.preventDefault();
@@ -43,20 +43,20 @@ export default function SignIn(props) {
         <CssBaseline />
         <Box
           sx={{
-            marginTop: 8,
+            marginTop: isMobile ? 2 : 8,
             display: 'flex',
             flexDirection: 'column',
             alignItems: 'center',
           }}
         >
-            <div style={{position:'absolute',left:'25%',top:'40%'}}>
+            {!isMobile && <div style={{position:'absolute',left:'25%',top:'40%'}}>
             <img src={SatSahib} width={"40%"} />
           <Typography component="h1" variant="h5" style={{marginLeft:'12%'}}>
             Sat Sahib
           </Typography>
-            </div>
-          <Box component="form" onSubmit={handleSubmit} noValidate sx={{ mt: 1 }} style={{marginTop:'10%'}}>
-          <img src={Logo} width={'70%'} />
+            </div>}
+          <Box component="form" onSubmit={handleSubmit} noValidate sx={{ mt: 1 }} style={{marginTop: isMobile ? null : '10%'}}>
+          <img src={isMobile ? SatSahib : Logo} width={isMobile ? '50%' : '70%'} />
           <h1>Welcome to Kabir Transport LLC</h1>   
             <TextField
               margin="normal"

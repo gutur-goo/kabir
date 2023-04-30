@@ -31,7 +31,7 @@ const columns = [
   { field: "includeVAT", headerName: "VAT" },
 ];
 
-const ContainerStatus = () => {
+const ContainerStatus = ({isMobile=false}) => {
 
   useEffect(() => {
     getContainerStatus().then(res => {
@@ -79,7 +79,7 @@ const ContainerStatus = () => {
         slots={{ toolbar: GridToolbar }}
       />
     </div>
-    {editContainerStatus && <EditJob rowData={rowData} setEditJob={setEditContainerStatus}/> }
+    {editContainerStatus && <EditJob isMobile={isMobile} rowData={rowData} setEditJob={setEditContainerStatus}/> }
     </React.Fragment>
   )
 }

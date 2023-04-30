@@ -11,7 +11,7 @@ const dummyContainerStatus = [
     { name: "COMPLETED" },
   ];
 
-const PopUp = ({ popUpType, handleClick,manageNewEntries}) => {
+const PopUp = ({ popUpType, handleClick,manageNewEntries,isMobile=false}) => {
 
     const [name,setName] = useState('');
     const [TRN,setTRN] = useState('');
@@ -40,7 +40,7 @@ const PopUp = ({ popUpType, handleClick,manageNewEntries}) => {
     return (
         <React.Fragment>
         <div onClick={handleClick} style ={{backgroundColor : 'rgba(0,0,0,0.93)',width:'100%',height:'100%',position:'absolute',zIndex:5,opacity:0.9}} />
-        <div style={{backgroundColor:'white',position:'absolute',zIndex:6,width:'30%',height:null,left:'35%',top:'40%',borderRadius:4,padding:20}}>
+        <div style={{backgroundColor:'white',position:'absolute',zIndex:6,width:isMobile ? '70%' : '30%',height:null,left:isMobile ? '10%' : '35%',top:'40%',borderRadius:4,padding:20}}>
         <div style={{display:'flex',alignItems:'center',flexDirection:'column'}}>
         <h3>{`Add a New ${popUpType}`}</h3>
         {popUpType != 'ContainerStatus' && <TextInput label={'Enter Name'} handleChange={setName} />}
