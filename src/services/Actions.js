@@ -127,9 +127,19 @@ export const postTransporterData = (payload) => {
       })
 }
 
-export const getFromToData = () => {
+export const getFromData = () => {
     return Api.get({
-        path: `${apiDomain}/transport/location`,
+        path: `${apiDomain}/transport/location?type=SOURCE`,
+        options: {
+            method: 'GET',
+            timeout: 10000
+        },
+    })
+}
+
+export const getToData = () => {
+    return Api.get({
+        path: `${apiDomain}/transport/location?type=DESTINATION`,
         options: {
             method: 'GET',
             timeout: 10000

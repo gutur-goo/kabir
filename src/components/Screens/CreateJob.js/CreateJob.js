@@ -32,7 +32,8 @@ import { apiDomain } from "../../../services/constants";
 import {
   getCustomerData,
   getDriverData,
-  getFromToData,
+  getFromData,
+  getToData,
   getJobTypeData,
   getReferenceData,
   getTransporterData,
@@ -90,7 +91,8 @@ const CreateJob = ({
       getTransporterData(),
       getDriverData(),
       getVehicleData(),
-      getFromToData(),
+      getFromData(),
+      getToData()
     ];
     Promise.allSettled(promises)
       .then((res) => {
@@ -115,7 +117,9 @@ const CreateJob = ({
               setVehicleList(result.value.data);
               break;
             case 6:
-              setPickDropData(result.value.data);
+              setPickData(result.value.data);
+            case 7:
+              setDropData(result.value.data);
               setShowLoader(false);
               break;
           }
@@ -153,10 +157,11 @@ const CreateJob = ({
       vehicleIn: vehicleIn,
       vehicleOut: vehicleOut,
       transport: transport,
+      jobDate: jobDate === null || isNaN(jobDate.$D) ? (editJob ? rowData.doVal : "") : (jobDate.$D+"-"+(jobDate.$M+1)+"-"+jobDate.$y),
       doVal: doValue === null || isNaN(doValue.$D) ? (editJob ? rowData.doVal : "") : (doValue.$D+"-"+(doValue.$M+1)+"-"+doValue.$y),
       storage: storage === null || isNaN(storage.$D) ? (editJob ? rowData.storage : "") : storage.$D+"-"+(storage.$M+1)+"-"+storage.$y,
       containerSize: containerSize,
-      includeVAT: VAT === "5" ? "True" : "False",
+      jobVAT: VAT === "5" ? 5 : 0,
       registerContainer: editJob ? rowData.registerContainer : registerForStatus ? "True" : "False",
     };
     // console.log("Payload -> ",payload)
@@ -209,9 +214,11 @@ const CreateJob = ({
   const [registerForStatus, setRegisterForStatus] = useState(false);
   const [showPopUp, setShowPopUp] = useState(false);
   const [popUpType, setPopUpType] = useState("");
-  const [pickDropData, setPickDropData] = useState();
+  const [pickData, setPickData] = useState();
+  const [dropData, setDropData] = useState();
   const [driverCommision, setDriverComission] = useState(editJob ? rowData.commission : "");
   const [showLoader, setShowLoader] = useState(true);
+  const [jobDate,setJobDate] = useState(null);
 
   const manageNewEntries = (data) => {
     let payload;
@@ -237,9 +244,17 @@ const CreateJob = ({
         };
         postReferenceData(payload);
         break;
-      case "Pick-up/Drop Location":
+      case "From":
         payload = {
           locationName: data.name,
+          locationType:"SOURCE"
+        };
+        postFromToData(payload);
+        break;
+      case "To":
+        payload = {
+          locationName: data.name,
+          locationType:"DESTINATION"
         };
         postFromToData(payload);
         break;
@@ -313,9 +328,9 @@ const CreateJob = ({
 
   const CalenderSelect = ({ label, handleChange, value }) => {
     return (
-      <div style={{ marginTop: 10, marginLeft: 30, backgroundColor: "white" }} >
         <LocalizationProvider dateAdapter={AdapterDayjs}>
           <DemoContainer components={["DatePicker"]}>
+          <div style={{ marginTop: 10, marginLeft: 30, backgroundColor: "white"}}>
             <DatePicker
               value={value}
               label={label}
@@ -323,9 +338,9 @@ const CreateJob = ({
                 handleChange(e)
               }}
             />
+            </div>
           </DemoContainer>
         </LocalizationProvider>
-      </div>
     );
   };
 
@@ -361,14 +376,12 @@ const CreateJob = ({
           {editJob ? `EDIT THIS JOB!` : `CREATE A JOB!`}
         </h1>
         <div style={{ flexDirection: "row", display: "flex" ,width:'500%'}}>
-          {!editJob && (
             <DropDown
               label="Customer"
               value={customer}
               handleChange={setCustomer}
               data={customerList}
             />
-          )}
           <div style={{ marginTop: 20 }}>
             {!editJob && (
               <ContainedButton
@@ -402,6 +415,11 @@ const CreateJob = ({
           </div>
           </div>
           <div style={{width:'60%'}}>
+          <CalenderSelect
+            value={jobDate}
+            label="Job Date"
+            handleChange={setJobDate}
+          />
           <TextInput
             value={jobNumber}
             label="Job no."
@@ -470,7 +488,7 @@ const CreateJob = ({
           </div>
         <div style={{ flexDirection: "row", display: "flex",width:'500%' }}>
           <DropDown
-            data={pickDropData}
+            data={pickData}
             value={from}
             label="From"
             handleChange={setFrom}
@@ -490,7 +508,7 @@ const CreateJob = ({
           </div>
           <div style={{width:'500%'}}>
           <DropDown
-            data={pickDropData}
+            data={dropData}
             value={to}
             label="To"
             handleChange={setTo}
@@ -623,14 +641,12 @@ const CreateJob = ({
           {editJob ? `EDIT THIS JOB!` : `CREATE A JOB!`}
         </h1>
         <div style={{ flexDirection: "row", display: "flex" }}>
-          {!editJob && (
             <DropDown
               label="Customer"
               value={customer}
               handleChange={setCustomer}
               data={customerList}
             />
-          )}
           <div style={{ marginTop: 20 }}>
             {!editJob && (
               <ContainedButton
@@ -659,6 +675,11 @@ const CreateJob = ({
               />
             )}
           </div>
+          <CalenderSelect
+            value={jobDate}
+            label="Job Date"
+            handleChange={setJobDate}
+          />
           <TextInput
             value={jobNumber}
             label="Job no."
@@ -718,7 +739,7 @@ const CreateJob = ({
             handleChange={setRemarks}
           />
           <DropDown
-            data={pickDropData}
+            data={pickData}
             value={from}
             label="From"
             handleChange={setFrom}
@@ -729,17 +750,28 @@ const CreateJob = ({
                 Icon={PlusIcon}
                 handleClick={() => {
                   setShowPopUp(true);
-                  setPopUpType("Pick-up/Drop Location");
+                  setPopUpType("From");
                 }}
               />
             )}
           </div>
           <DropDown
-            data={pickDropData}
+            data={dropData}
             value={to}
             label="To"
             handleChange={setTo}
           />
+          <div style={{ marginTop: 20 }}>
+            {!editJob && (
+              <ContainedButton
+                Icon={PlusIcon}
+                handleClick={() => {
+                  setShowPopUp(true);
+                  setPopUpType("To");
+                }}
+              />
+            )}
+          </div>
           <DropDown
             data={transportList}
             value={transport}
@@ -774,11 +806,28 @@ const CreateJob = ({
           />
         </div>
         <div style={{ flexDirection: "row", display: "flex" }}>
-          <DropDown
+        <DropDown
+            data={vehicleList}
+            value={vehicleOut}
+            label="Vehicle OUT"
+            handleChange={setVehicleOut}
+          />
+          <div style={{ marginTop: 20 }}>
+            {!editJob && (
+              <ContainedButton
+                Icon={PlusIcon}
+                handleClick={() => {
+                  setShowPopUp(true);
+                  setPopUpType("Vehicle");
+                }}
+              />
+            )}
+          </div>
+        <DropDown
             data={driverList}
-            value={driverIn}
-            label="Driver IN"
-            handleChange={setDriverIn}
+            value={driverOut}
+            label="Driver OUT"
+            handleChange={setDriverOut}
           />
           <div style={{ marginTop: 20 }}>
             {!editJob && (
@@ -792,33 +841,16 @@ const CreateJob = ({
             )}
           </div>
           <DropDown
-            data={driverList}
-            value={driverOut}
-            label="Driver OUT"
-            handleChange={setDriverOut}
-          />
-          <DropDown
             data={vehicleList}
             value={vehicleIn}
             label="Vehicle IN"
             handleChange={setVehicleIn}
           />
-          <div style={{ marginTop: 20 }}>
-            {!editJob && (
-              <ContainedButton
-                Icon={PlusIcon}
-                handleClick={() => {
-                  setShowPopUp(true);
-                  setPopUpType("Vehicle");
-                }}
-              />
-            )}
-          </div>
           <DropDown
-            data={vehicleList}
-            value={vehicleOut}
-            label="Vehicle OUT"
-            handleChange={setVehicleOut}
+            data={driverList}
+            value={driverIn}
+            label="Driver IN"
+            handleChange={setDriverIn}
           />
           <TextInput
             value={driverCommision}
