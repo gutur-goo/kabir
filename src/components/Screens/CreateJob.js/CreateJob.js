@@ -506,13 +506,24 @@ const CreateJob = ({
             )}
           </div>
           </div>
-          <div style={{width:'500%'}}>
+          <div style={{ flexDirection: "row", display: "flex",width:'500%' }}>
           <DropDown
             data={dropData}
             value={to}
             label="To"
             handleChange={setTo}
           />
+          <div style={{ marginTop: 20 }}>
+            {!editJob && (
+              <ContainedButton
+                Icon={PlusIcon}
+                handleClick={() => {
+                  setShowPopUp(true);
+                  setPopUpType("To");
+                }}
+              />
+            )}
+          </div>
           </div>
            <div style={{ flexDirection: "row", display: "flex",width:'500%' }}>
           <DropDown
@@ -550,39 +561,11 @@ const CreateJob = ({
           />
         </div>
         <div style={{ flexDirection: "row", display: "flex",width:'500%' }}>
-          <DropDown
-            data={driverList}
-            value={driverIn}
-            label="Driver IN"
-            handleChange={setDriverIn}
-          />
-          <div style={{ marginTop: 20 }}>
-            {!editJob && (
-              <ContainedButton
-                Icon={PlusIcon}
-                handleClick={() => {
-                  scrollToTop();
-                  setShowPopUp(true);
-                  setPopUpType("Driver");
-                }}
-              />
-            )}
-          </div>
-          </div>
-          <div style={{width:'500%'}}>
-          <DropDown
-            data={driverList}
-            value={driverOut}
-            label="Driver OUT"
-            handleChange={setDriverOut}
-          />
-          </div>
-          <div style={{ flexDirection: "row", display: "flex",width:'500%' }}>
-          <DropDown
+        <DropDown
             data={vehicleList}
-            value={vehicleIn}
-            label="Vehicle IN"
-            handleChange={setVehicleIn}
+            value={vehicleOut}
+            label="Vehicle OUT"
+            handleChange={setVehicleOut}
           />
           <div style={{ marginTop: 20 }}>
             {!editJob && (
@@ -597,12 +580,40 @@ const CreateJob = ({
             )}
           </div>
           </div>
+          <div style={{ flexDirection: "row", display: "flex",width:'500%' }}>
+          <DropDown
+            data={driverList}
+            value={driverOut}
+            label="Driver OUT"
+            handleChange={setDriverOut}
+          />
+          <div style={{ marginTop: 20 }}>
+                {!editJob && (
+              <ContainedButton
+                Icon={PlusIcon}
+                handleClick={() => {
+                  scrollToTop();
+                  setShowPopUp(true);
+                  setPopUpType("Driver");
+                }}
+              />
+            )}
+          </div>
+          </div>
           <div style={{width:'500%'}}>
           <DropDown
             data={vehicleList}
-            value={vehicleOut}
-            label="Vehicle OUT"
-            handleChange={setVehicleOut}
+            value={vehicleIn}
+            label="Vehicle IN"
+            handleChange={setVehicleIn}
+          />
+          </div>
+          <div style={{ width:'500%' }}>
+          <DropDown
+            data={driverList}
+            value={driverIn}
+            label="Driver IN"
+            handleChange={setDriverIn}
           />
           </div>
           <div style={{width:'60%'}}>
