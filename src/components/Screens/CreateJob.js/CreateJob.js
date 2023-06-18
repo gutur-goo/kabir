@@ -65,7 +65,7 @@ const dummyContainerStatus = [
 }
 ];
 
-const dummyVATList = [{ name: "5",id: "5" }, { name: "0",id: "0" }]
+const dummyVATList = [{ name: "5",id: "5.00" }, { name: "0",id: "0.00" }]
 
 const dummyContainerSize = [
   {
@@ -210,8 +210,8 @@ const CreateJob = ({
   const [containerSize, setContainerSize] = useState(
     editJob ? rowData.containerSize.includes('20') ? '20' : '40' : ""
   );
-  const [VAT, setVAT] = useState(editJob ? rowData.VAT : "5");
-  const [registerForStatus, setRegisterForStatus] = useState(false);
+  const [VAT, setVAT] = useState(editJob ? rowData.jobVAT : "5");
+  const [registerForStatus, setRegisterForStatus] = useState(editJob ? rowData.registerContainer : false);
   const [showPopUp, setShowPopUp] = useState(false);
   const [popUpType, setPopUpType] = useState("");
   const [pickData, setPickData] = useState();
@@ -219,6 +219,8 @@ const CreateJob = ({
   const [driverCommision, setDriverComission] = useState(editJob ? rowData.commission : "");
   const [showLoader, setShowLoader] = useState(true);
   const [jobDate,setJobDate] = useState(null);
+
+  console.log("rowData.VAT -> ",rowData.jobVAT);
 
   const manageNewEntries = (data) => {
     let payload;
@@ -624,15 +626,12 @@ const CreateJob = ({
           />
           </div>
         <div style={{ display: "flex", flexDirection: "column", marginTop: 10,width:'500%' }}>
-          {!editJob && (
             <DropDown
               label={"VAT"}
               data={dummyVATList}
               handleChange={setVAT}
               value={VAT}
             />
-          )}
-          {!editJob && (
             <div style={{ marginLeft: 30, marginTop: 25 }}>
               <FormControlLabel
                 onChange={() => {
@@ -642,7 +641,6 @@ const CreateJob = ({
                 label="Register for Container Status"
               />
             </div>
-          )}
         </div>
         <Buttons />
       </div>
@@ -870,15 +868,12 @@ const CreateJob = ({
           />
         </div>
         <div style={{ display: "flex", flexDirection: "row", marginTop: 10 }}>
-          {!editJob && (
             <DropDown
               label={"VAT"}
               data={dummyVATList}
               handleChange={setVAT}
               value={VAT}
             />
-          )}
-          {!editJob && (
             <div style={{ marginLeft: 10, marginTop: 25 }}>
               <FormControlLabel
                 onChange={() => {
@@ -888,7 +883,6 @@ const CreateJob = ({
                 label="Register for Container Status"
               />
             </div>
-          )}
         </div>
         <Buttons />
       </div>}
