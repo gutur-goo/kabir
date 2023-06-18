@@ -1,43 +1,29 @@
 import React, { useState, useEffect } from "react";
 import { DataGrid, GridToolbar } from "@mui/x-data-grid";
 import CustomerDetailsTabInvoice from "../../CustomerDetailsTabInvoice";
+import { getOutstandings } from "../../../services/Actions";
+import { Backdrop, CircularProgress } from "@mui/material";
 
 const columns = [
-  { field: "id", headerName: "S No.", flex: 1 },
-  { field: "customer", headerName: "Customer", flex: 1 },
-  { field: "outstanding", headerName: "Outstanding Amount", flex: 1 },
-];
-
-const dummyData = [
-  {
-    id: "1",
-    customer: "VCL LLC",
-    outstanding: "2500",
-    outstandingInvoices : [{invoiceNumber : 'INVFKDJHIO',invoiceNumber : 'INVFKDJHIO',invoiceNumber : 'INVFKDJHIO'}]
-  },
-  {
-    id: "2",
-    customer: "ABL Enterprises",
-    outstanding: "500",
-    outstandingInvoices : [{invoiceNumber : 'INVFKDJHIO',invoiceNumber : 'INVFKDJHIO',invoiceNumber : 'INVFKDJHIO'}]
-  },
-  {
-    id: "3",
-    customer: "DART Logistics",
-    outstanding: "4500",
-    outstandingInvoices : [{invoiceNumber : 'INVFKDJHIO',invoiceNumber : 'INVFKDJHIO',invoiceNumber : 'INVFKDJHIO'}]
-  },
-  {
-    id: "4",
-    customer: "VILMAR GROUP",
-    outstanding: "2100",
-    outstandingInvoices : [{invoiceNumber : 'INVFKDJHIO',invoiceNumber : 'INVFKDJHIO',invoiceNumber : 'INVFKDJHIO'}]
-  },
+  { field: "customerId", headerName: "S No.", flex: 1 },
+  { field: "customerName", headerName: "Customer", flex: 1 },
+  { field: "totalOutstanding", headerName: "Outstanding Amount", flex: 1 },
 ];
 
 const InvoiceScreen = () => {
+
+  const [customerOutstandings,setCustomerOutstandings] = useState([]);
+
+  useEffect(() => {
+    getOutstandings().then(res => {
+      setCustomerOutstandings(res.data);
+      setShowLoader(false);
+    })
+  },[]);
+
   const [customerSelect, setCustomerSelect] = useState(false);
   const [rowData, setRowData] = useState({});
+  const [showLoader, setShowLoader] = useState(true);
 
   const handleRowClick = (e) => {
     setRowData(e.row);
@@ -46,6 +32,13 @@ const InvoiceScreen = () => {
 
   return (
     <React.Fragment>
+      <Backdrop
+        sx={{ color: "#fff", zIndex: (theme) => theme.zIndex.drawer + 1 }}
+        open={showLoader}
+        // onClick={handleClose}
+      >
+        <CircularProgress color="inherit" />
+      </Backdrop>
       <h1 style={{ display: "flex", justifyContent: "center" }}>INVOICING</h1>
       <div
         style={{ display: "flex", flexDirection: "row", alignItems: "center" }}
@@ -53,7 +46,8 @@ const InvoiceScreen = () => {
         <div style={{ height: 700, width: "30%" }}>
           <DataGrid
             onRowClick={handleRowClick}
-            rows={dummyData}
+            rows={customerOutstandings}
+            getRowId={(row) => row.customerId}
             columns={columns}
             disableColumnResize={true}
             pageSize={12}

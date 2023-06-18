@@ -73,17 +73,17 @@ const HeaderTabs = ({isMobile = false,isAdmin=false}) => {
   <Tab icon={<ContainerIcon />} iconPosition="end" label="All Jobs" value={1} />
   <Tab icon={<PlusIcon />} iconPosition="end" label="Create a job" value={2} />
   <Tab icon={<ContainerIcon />} iconPosition="end" label="Container status" value={3} />
-  {/* {isAdmin && <Tab icon={<InvoiceIcon />} iconPosition="end" label="Invoicing" value={4} />}
+  {isAdmin && <Tab icon={<InvoiceIcon />} iconPosition="end" label="Invoicing" value={4} />}
   {isAdmin && <Tab icon={<ExpenseIcon />} iconPosition="end" label="Expenses" value={5} />}
-  {isAdmin && <Tab icon={<PaymentsIcon />} iconPosition="end" label="Payments" value={6} />} */}
+  {isAdmin && <Tab icon={<PaymentsIcon />} iconPosition="end" label="Payments" value={6} />}
 </Tabs>
 </div>
     {value === 1 && <AllJobs isMobile={isMobile} />}
     {value === 2 && <CreateJob isMobile={isMobile} />}
     {value === 3 && <ContainerStatus isMobile={isMobile} />}
-    {/* {value === 4 && <InvoiceScreen isMobile={isMobile} />}
+    {value === 4 && <InvoiceScreen isMobile={isMobile} />}
     {value === 5 && <ExpensesScreen isMobile={isMobile} />}
-    {value === 6 && <PaymentsScreen isMobile={isMobile} />} */}
+    {value === 6 && <PaymentsScreen isMobile={isMobile} />}
     
   </React.Fragment>
 

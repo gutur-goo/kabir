@@ -1,7 +1,10 @@
-import React from "react";
+import React, { useEffect, useRef } from "react";
 import "./InvoiceTemplate.css";
 import Header from "../../../assets/templateHeaders/InvoiceHeader.png";
 import Footer from "../../../assets/templateHeaders/InvoiceFooter.png";
+import html2pdf from "html2pdf.js";
+import {connect} from 'react-redux';
+import { useReactToPrint } from "react-to-print";
 
 function numToWords(num) {
 	const ones = ['', 'One', 'Two', 'Three', 'Four', 'Five', 'Six', 'Seven', 'Eight', 'Nine'];
@@ -86,23 +89,65 @@ const tableData = [
   },
 ];
 
-const InvoiceTemplate = () => {
+const InvoiceTemplate = (props) => {
+const {
+  rowData=[],
+  invoiceAmount='',
+  taxableValue='',
+  totalVatAmount='',
+  grossAmount='',
+  customer='',
+  customerTRN='',
+  invoiceDate='',
+  invoiceNo='',
+} = JSON.parse(localStorage.getItem('invoice_data'));
 
-	let invoiceAmount = 0;
-	let taxableValue = 0;
-	let VATAmount = 0;
-	let grossAmount = 0;
+localStorage.removeItem('invoice_data');
+
+	// let invoiceAmount = 0;
+	// let taxableValue = 0;
+	// let VATAmount = 0;
+	// let grossAmount = 0;
+
+  const componentRef = useRef();
+  const handlePrint = useReactToPrint({
+    content: () => componentRef.current,
+  });
+
+  useEffect(() => {
+    handlePrint();
+  },[]);
+
+  const handleDownload = () => {
+    const element = document.getElementById('html-content');
+    const opt = {
+      // margin: 1,
+      filename: 'INV178384.pdf',
+      image: { type: 'jpeg', quality: 1 },
+      html2canvas: { scale: 2 },
+      // jsPDF: { unit: 'in', format: 'letter', orientation: 'portrait' },
+    };
+    html2pdf().set(opt).from(element).save();
+  };
+
+  useEffect(() => {
+    // handleDownload();
+    // const timeout = setTimeout(() => {
+    //   window.close();
+    // },1000);
+    // return () => clearTimeout(timeout);
+  },[]);
 
   return (
-    <div class="invoice-box">
-      <img src={Header} style={{ marginLeft: 40 }} />
+    <div class="invoice-box" id="html-content" ref={componentRef}>
+      <img src={Header} />
       <div style={{ display: "flex", justifyContent: "space-between" }}>
         <div style={{ marginLeft: 30 }}>
           <p>
             <b>Customer :</b>{" "}
             <span
               style={{ width: "30%", marginLeft: 5 }}
-            >{`VTS Clima LLC`}</span>
+            >{customer}</span>
           </p>
           <p style={{ display: "flex" }}>
             <b>Address :</b>
@@ -112,25 +157,21 @@ const InvoiceTemplate = () => {
           </p>
           <p>
             <b>Customer TRN : </b>
-            {`100067180800003`}
+            {customerTRN}
           </p>
         </div>
         <div>
           <p>
             <b>Invoice Date : </b>
-            {`2023-03-31`}
+            {invoiceDate}
           </p>
           <p>
             <b>Invoice Number : </b>
-            {`KT-230331-359`}
+            {invoiceNo}
           </p>
           <p>
             <b>Kabir TRN : </b>
             {`100451512600003`}
-          </p>
-          <p>
-            <b>Customer Ref/P O Number : </b>
-            {`GW-HVL2300029`}
           </p>
         </div>
       </div>
@@ -144,22 +185,22 @@ const InvoiceTemplate = () => {
           <th>Total VAT</th>
           <th>Total Amount</th>
         </tr>
-        {tableData.map((item, index) => {
-			invoiceAmount = invoiceAmount + parseInt(item.Rate)*parseInt(item.Qty);
-			taxableValue = taxableValue + (item.VAT == '5' ? parseInt(item.Rate)*parseInt(item.Qty) : 0) 
-			const vat = item.VAT == '0' ? 0 : (parseInt(item.Rate) * 0.05);
-			VATAmount = VATAmount + (vat*parseInt(item.Qty));
-			const total = (parseInt(item.Rate)*parseInt(item.Qty)) + (item.VAT == '0' ? 0 : (parseInt(item.Rate) * 0.05)*parseInt(item.Qty));
-			grossAmount = grossAmount + total;
+        {rowData.map((item, index) => {
+			// invoiceAmount = invoiceAmount + parseInt(item.Rate)*parseInt(item.Qty);
+			// taxableValue = taxableValue + (item.VAT == '5' ? parseInt(item.Rate)*parseInt(item.Qty) : 0) 
+			// const vat = item.VAT == '0' ? 0 : (parseInt(item.Rate) * 0.05);
+			// VATAmount = VATAmount + (vat*parseInt(item.Qty));
+			// const total = (parseInt(item.Rate)*parseInt(item.Qty)) + (item.VAT == '0' ? 0 : (parseInt(item.Rate) * 0.05)*parseInt(item.Qty));
+			// grossAmount = grossAmount + total;
 			return (
             <tr>
               <td>{index+1}</td>
-              <td>{item.Description}</td>
-              <td>{item.Qty}</td>
-              <td>{item.Rate}</td>
-              <td>{item.VAT}</td>
-              <td>{vat}</td>
-              <td>{total}</td>
+              <td>{item.description}</td>
+              <td>{item.quantity}</td>
+              <td>{item.rate}</td>
+              <td>{item['vat%']}</td>
+              <td>{item.totalVat}</td>
+              <td>{item.totalAmount}</td>
             </tr>
           );
         })}
@@ -188,7 +229,7 @@ const InvoiceTemplate = () => {
               <td>{''}</td>
               <td>{''}</td>
               <td>{`VAT Amount`}</td>
-              <td><b>{VATAmount}</b></td>
+              <td><b>{totalVatAmount}</b></td>
             </tr>
 			<tr>
               <td>{''}</td>
@@ -201,7 +242,7 @@ const InvoiceTemplate = () => {
             </tr>
       </table>
 	  <p style={{marginTop:20}}>{`Amount in words : ${numToWords(grossAmount)} Dirhams`}</p>
-      <img src={Footer} style={{ marginLeft: 40,marginTop:70 }} />
+      <img src={Footer} style={{ marginTop:70 }} />
     </div>
   );
 };

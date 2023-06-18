@@ -1,8 +1,10 @@
-import React from "react";
+import React, { useEffect, useRef } from "react";
 import "./SupportingList.css";
 import Header from "../../../assets/templateHeaders/InvoiceHeader.png";
 import Footer from "../../../assets/templateHeaders/InvoiceFooter.png";
 import Logo from "../../../assets/images/logo.png";
+import html2pdf from "html2pdf.js";
+import { useReactToPrint } from "react-to-print";
 
 function numToWords(num) {
   const ones = [
@@ -93,168 +95,217 @@ function chunkToWords(num, ones, tens, teens) {
 
 const tableData = [
   {
-    "Date" : "2023-03-01",
-    "Description" : "JEBEL ALI PORT to VTS IND AREA",
-    "Container" : "REGU509688", 
-    "Vehicle" : "88614 DXB",
-    "InvoiceNumber" : "KT230331-359",
-    "Customer": "VTS Clima LLC",
-    "DeliveryDate" : "2023-03-01", 
-    "Qty":"1", 
-    "Rate" : "400", 
-    "VAT" : "5", 
-    "Amount" : "420"
-    },
-    {
-      "Date" : "2023-03-01",
-      "Description" : "JEBEL ALI PORT to VTS IND AREA",
-      "Container" : "REGU509688", 
-      "Vehicle" : "88614 DXB",
-      "InvoiceNumber" : "KT230331-359",
-      "Customer": "VTS Clima LLC",
-      "DeliveryDate" : "2023-03-01", 
-      "Qty":"1", 
-      "Rate" : "400", 
-      "VAT" : "5", 
-      "Amount" : "420"
-      },
-      {
-        "Date" : "2023-03-01",
-        "Description" : "JEBEL ALI PORT to VTS IND AREA",
-        "Container" : "REGU509688", 
-        "Vehicle" : "88614 DXB",
-        "InvoiceNumber" : "KT230331-359",
-        "Customer": "VTS Clima LLC",
-        "DeliveryDate" : "2023-03-01", 
-        "Qty":"1", 
-        "Rate" : "400", 
-        "VAT" : "5", 
-        "Amount" : "420"
-        },
-        {
-          "Date" : "2023-03-01",
-          "Description" : "JEBEL ALI PORT to VTS IND AREA",
-          "Container" : "REGU509688", 
-          "Vehicle" : "88614 DXB",
-          "InvoiceNumber" : "KT230331-359",
-          "Customer": "VTS Clima LLC",
-          "DeliveryDate" : "2023-03-01", 
-          "Qty":"1", 
-          "Rate" : "400", 
-          "VAT" : "5", 
-          "Amount" : "420"
-          },
-          {
-            "Date" : "2023-03-01",
-            "Description" : "JEBEL ALI PORT to VTS IND AREA",
-            "Container" : "REGU509688", 
-            "Vehicle" : "88614 DXB",
-            "InvoiceNumber" : "KT230331-359",
-            "Customer": "VTS Clima LLC",
-            "DeliveryDate" : "2023-03-01", 
-            "Qty":"1", 
-            "Rate" : "400", 
-            "VAT" : "5", 
-            "Amount" : "420"
-            },
-            {
-              "Date" : "2023-03-01",
-              "Description" : "JEBEL ALI PORT to VTS IND AREA",
-              "Container" : "REGU509688", 
-              "Vehicle" : "88614 DXB",
-              "InvoiceNumber" : "KT230331-359",
-              "Customer": "VTS Clima LLC",
-              "DeliveryDate" : "2023-03-01", 
-              "Qty":"1", 
-              "Rate" : "400", 
-              "VAT" : "5", 
-              "Amount" : "420"
-              },
-              {
-                "Date" : "2023-03-01",
-                "Description" : "JEBEL ALI PORT to VTS IND AREA",
-                "Container" : "REGU509688", 
-                "Vehicle" : "88614 DXB",
-                "InvoiceNumber" : "KT230331-359",
-                "Customer": "VTS Clima LLC",
-                "DeliveryDate" : "2023-03-01", 
-                "Qty":"1", 
-                "Rate" : "400", 
-                "VAT" : "5", 
-                "Amount" : "420"
-                },
-                {
-                  "Date" : "2023-03-01",
-                  "Description" : "JEBEL ALI PORT to VTS IND AREA",
-                  "Container" : "REGU509688", 
-                  "Vehicle" : "88614 DXB",
-                  "InvoiceNumber" : "KT230331-359",
-                  "Customer": "VTS Clima LLC",
-                  "DeliveryDate" : "2023-03-01", 
-                  "Qty":"1", 
-                  "Rate" : "400", 
-                  "VAT" : "5", 
-                  "Amount" : "420"
-                  },
-                  {
-                    "Date" : "2023-03-01",
-                    "Description" : "JEBEL ALI PORT to VTS IND AREA",
-                    "Container" : "REGU509688", 
-                    "Vehicle" : "88614 DXB",
-                    "InvoiceNumber" : "KT230331-359",
-                    "Customer": "VTS Clima LLC",
-                    "DeliveryDate" : "2023-03-01", 
-                    "Qty":"1", 
-                    "Rate" : "400", 
-                    "VAT" : "5", 
-                    "Amount" : "420"
-                    },
-                    {
-                      "Date" : "2023-03-01",
-                      "Description" : "JEBEL ALI PORT to VTS IND AREA",
-                      "Container" : "REGU509688", 
-                      "Vehicle" : "88614 DXB",
-                      "InvoiceNumber" : "KT230331-359",
-                      "Customer": "VTS Clima LLC",
-                      "DeliveryDate" : "2023-03-01", 
-                      "Qty":"1", 
-                      "Rate" : "400", 
-                      "VAT" : "5", 
-                      "Amount" : "420"
-                      },
-                      {
-                        "Date" : "2023-03-01",
-                        "Description" : "JEBEL ALI PORT to VTS IND AREA",
-                        "Container" : "REGU509688", 
-                        "Vehicle" : "88614 DXB",
-                        "InvoiceNumber" : "KT230331-359",
-                        "Customer": "VTS Clima LLC",
-                        "DeliveryDate" : "2023-03-01", 
-                        "Qty":"1", 
-                        "Rate" : "400", 
-                        "VAT" : "5", 
-                        "Amount" : "420"
-                        }
+    Date: "2023-03-01",
+    Description: "JEBEL ALI PORT to VTS IND AREA",
+    Container: "REGU509688",
+    Vehicle: "88614 DXB",
+    InvoiceNumber: "KT230331-359",
+    Customer: "VTS Clima LLC",
+    DeliveryDate: "2023-03-01",
+    Qty: "1",
+    Rate: "400",
+    VAT: "5",
+    Amount: "420",
+  },
+  {
+    Date: "2023-03-01",
+    Description: "JEBEL ALI PORT to VTS IND AREA",
+    Container: "REGU509688",
+    Vehicle: "88614 DXB",
+    InvoiceNumber: "KT230331-359",
+    Customer: "VTS Clima LLC",
+    DeliveryDate: "2023-03-01",
+    Qty: "1",
+    Rate: "400",
+    VAT: "5",
+    Amount: "420",
+  },
+  {
+    Date: "2023-03-01",
+    Description: "JEBEL ALI PORT to VTS IND AREA",
+    Container: "REGU509688",
+    Vehicle: "88614 DXB",
+    InvoiceNumber: "KT230331-359",
+    Customer: "VTS Clima LLC",
+    DeliveryDate: "2023-03-01",
+    Qty: "1",
+    Rate: "400",
+    VAT: "5",
+    Amount: "420",
+  },
+  {
+    Date: "2023-03-01",
+    Description: "JEBEL ALI PORT to VTS IND AREA",
+    Container: "REGU509688",
+    Vehicle: "88614 DXB",
+    InvoiceNumber: "KT230331-359",
+    Customer: "VTS Clima LLC",
+    DeliveryDate: "2023-03-01",
+    Qty: "1",
+    Rate: "400",
+    VAT: "5",
+    Amount: "420",
+  },
+  {
+    Date: "2023-03-01",
+    Description: "JEBEL ALI PORT to VTS IND AREA",
+    Container: "REGU509688",
+    Vehicle: "88614 DXB",
+    InvoiceNumber: "KT230331-359",
+    Customer: "VTS Clima LLC",
+    DeliveryDate: "2023-03-01",
+    Qty: "1",
+    Rate: "400",
+    VAT: "5",
+    Amount: "420",
+  },
+  {
+    Date: "2023-03-01",
+    Description: "JEBEL ALI PORT to VTS IND AREA",
+    Container: "REGU509688",
+    Vehicle: "88614 DXB",
+    InvoiceNumber: "KT230331-359",
+    Customer: "VTS Clima LLC",
+    DeliveryDate: "2023-03-01",
+    Qty: "1",
+    Rate: "400",
+    VAT: "5",
+    Amount: "420",
+  },
+  {
+    Date: "2023-03-01",
+    Description: "JEBEL ALI PORT to VTS IND AREA",
+    Container: "REGU509688",
+    Vehicle: "88614 DXB",
+    InvoiceNumber: "KT230331-359",
+    Customer: "VTS Clima LLC",
+    DeliveryDate: "2023-03-01",
+    Qty: "1",
+    Rate: "400",
+    VAT: "5",
+    Amount: "420",
+  },
+  {
+    Date: "2023-03-01",
+    Description: "JEBEL ALI PORT to VTS IND AREA",
+    Container: "REGU509688",
+    Vehicle: "88614 DXB",
+    InvoiceNumber: "KT230331-359",
+    Customer: "VTS Clima LLC",
+    DeliveryDate: "2023-03-01",
+    Qty: "1",
+    Rate: "400",
+    VAT: "5",
+    Amount: "420",
+  },
+  {
+    Date: "2023-03-01",
+    Description: "JEBEL ALI PORT to VTS IND AREA",
+    Container: "REGU509688",
+    Vehicle: "88614 DXB",
+    InvoiceNumber: "KT230331-359",
+    Customer: "VTS Clima LLC",
+    DeliveryDate: "2023-03-01",
+    Qty: "1",
+    Rate: "400",
+    VAT: "5",
+    Amount: "420",
+  },
+  {
+    Date: "2023-03-01",
+    Description: "JEBEL ALI PORT to VTS IND AREA",
+    Container: "REGU509688",
+    Vehicle: "88614 DXB",
+    InvoiceNumber: "KT230331-359",
+    Customer: "VTS Clima LLC",
+    DeliveryDate: "2023-03-01",
+    Qty: "1",
+    Rate: "400",
+    VAT: "5",
+    Amount: "420",
+  },
+  {
+    Date: "2023-03-01",
+    Description: "JEBEL ALI PORT to VTS IND AREA",
+    Container: "REGU509688",
+    Vehicle: "88614 DXB",
+    InvoiceNumber: "KT230331-359",
+    Customer: "VTS Clima LLC",
+    DeliveryDate: "2023-03-01",
+    Qty: "1",
+    Rate: "400",
+    VAT: "5",
+    Amount: "420",
+  },
 ];
 
-const SupportingListTemplate = () => {
-  let invoiceAmount = 0;
-  let taxableValue = 0;
-  let VATAmount = 0;
-  let grossAmount = 0;
+const SupportingListTemplate = (props) => {
+
+  const {
+    customerName = "",
+    invoiceNo = "",
+    rowData = "",
+  } = JSON.parse(localStorage.getItem('supporting_data'));
+
+  localStorage.removeItem('supporting_data');
+
+  const componentRef = useRef();
+  const handlePrint = useReactToPrint({
+    content: () => componentRef.current,
+  });
+
+  useEffect(() => {
+    handlePrint();
+  },[]);
+
+  const handleDownload = () => {
+    const element = document.getElementById("html-content");
+    const opt = {
+      // margin: 1,
+      filename: "SUPPORT_INV178384.pdf",
+      image: { type: "jpeg", quality: 1 },
+      html2canvas: { scale: 2 },
+      // jsPDF: { unit: 'in', format: 'letter', orientation: 'portrait' },
+    };
+    html2pdf().set(opt).from(element).save();
+  };
+
+  // useEffect(() => {
+  //   handleDownload();
+  //   const timeout = setTimeout(() => {
+  //     window.close();
+  //   }, 1000);
+  //   return () => clearTimeout(timeout);
+  // }, []);
 
   return (
     <div
       class="invoice-box"
+      id="html-content"
       style={{
         display: "flex",
         alignItems: "center",
         // justifyContent: "center",
         flexDirection: "column",
       }}
+      ref={componentRef}
     >
       <img src={Logo} />
       <h2>Supporting list</h2>
+      <div>
+          <p>
+            <b>Customer :</b>
+            <span
+              style={{ width: "30%", marginLeft: 5 }}
+            >{customerName}</span>
+          </p>
+          <p style={{ display: "flex" }}>
+            <b>Invoice Number :</b>
+            <span
+              style={{marginLeft: 5 }}
+            >{invoiceNo}</span>
+          </p>
+        </div>
       <table style={{ width: "100%", marginTop: 30, textAlign: "center" }}>
         <tr>
           <th>SI.No</th>
@@ -262,33 +313,33 @@ const SupportingListTemplate = () => {
           <th>Description</th>
           <th>Container</th>
           <th>Vehicle</th>
-          <th>Invoice No.</th>
-          <th>Customer</th>
+          {/* <th>Invoice No.</th>
+          <th>Customer</th> */}
           <th>Delivery Date</th>
           <th>Qty</th>
           <th>Rate</th>
           <th>VAT</th>
           <th>Amount</th>
         </tr>
-        {tableData.map((item, index) => {
-			return (
+        {rowData.map((item, index) => {
+          return (
             <tr>
-              <td>{index+1}</td>
-              <td>{item.Date}</td>
-              <td>{item.Description}</td>
-              <td>{item.Container}</td>
-              <td>{item.Vehicle}</td>
-              <td>{item.InvoiceNumber}</td>
-              <td>{item.Customer}</td>
-              <td>{item.DeliveryDate}</td>
-              <td>{item.Qty}</td>
-              <td>{item.Rate}</td>
-              <td>{item.VAT}</td>
-              <td>{item.Amount}</td>
+              <td>{index + 1}</td>
+              <td>{item.date}</td>
+              <td>{item.description}</td>
+              <td>{item.container}</td>
+              <td>{item.vehicle}</td>
+              {/* <td>{item.invoiceNo}</td>
+              <td>{item.customer}</td> */}
+              <td>{item.deliveryDate}</td>
+              <td>{item.quantity}</td>
+              <td>{item.rate}</td>
+              <td>{item.vat}</td>
+              <td>{item.amount}</td>
             </tr>
           );
         })}
-        </table>
+      </table>
     </div>
   );
 };

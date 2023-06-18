@@ -1,8 +1,9 @@
-import React from "react";
+import React, { useEffect, useRef } from "react";
 import "./PaymentRecieptTemplate.css";
 import Header from "../../../assets/templateHeaders/InvoiceHeader.png";
 import Footer from "../../../assets/templateHeaders/InvoiceFooter.png";
 import Logo from "../../../assets/images/logo.png";
+import { useReactToPrint } from "react-to-print";
 
 function numToWords(num) {
   const ones = [
@@ -118,11 +119,27 @@ const tableData = [
   },
 ];
 
-const PaymentReceiptTemplate = () => {
-  let invoiceAmount = 0;
-  let taxableValue = 0;
-  let VATAmount = 0;
-  let grossAmount = 0;
+const PaymentReceiptTemplate = React.forwardRef((props, ref) => {
+
+  const {
+    customerName='',
+    invoiceNumber='',
+    amount='',
+    amountInWords='',
+    date='',
+    methodReference='',
+  } = JSON.parse(localStorage.getItem('payment_data'));
+
+  localStorage.removeItem('payment_data');
+
+  const componentRef = useRef();
+  const handlePrint = useReactToPrint({
+    content: () => componentRef.current,
+  });
+
+  useEffect(() => {
+    handlePrint();
+  },[]);
 
   return (
     <div
@@ -133,6 +150,7 @@ const PaymentReceiptTemplate = () => {
         // justifyContent: "center",
         flexDirection: "column",
       }}
+      ref={componentRef}
     >
       <img src={Logo} />
       <h2>Payment Reciept</h2>
@@ -141,18 +159,18 @@ const PaymentReceiptTemplate = () => {
         marginLeft:'20%'
       }}
       >
-      <p>Customer Name : <span><b>AW ROSTAMANI LOGISTICS</b></span></p>
-      <p>Invoice No : <span><b>KT-221231-328</b></span></p>
-      <p>Amount: <span><b>19530</b></span></p>
+      <p>Customer Name : <span><b>{customerName}</b></span></p>
+      <p>Invoice No : <span><b>{invoiceNumber}</b></span></p>
+      <p>Amount: <span><b>{amount}</b></span></p>
       <p>
-        Amount in words : <span><b>Nineteen Thousands Five Hundred and Thirty Dirhams</b></span>
+        Amount in words : <span><b>{amountInWords}</b></span>
       </p>
-      <p>Date : <span><b>2023-02-21</b></span></p>
-      <p>Method Ref# : <span><b>21-02-23 Ch#043780 MASHREQ BANK</b></span></p>
+      <p>Date : <span><b>{date}</b></span></p>
+      <p>Method Ref# : <span><b>{methodReference}</b></span></p>
       </div>
       <h4>The above payment has been recieved</h4>
     </div>
   );
-};
+});
 
 export default PaymentReceiptTemplate;

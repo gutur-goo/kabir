@@ -165,6 +165,50 @@ export const getContainerStatus = () => {
     })
 }
 
+export const getNonInvoicedJobs = (customerId,VAT) => {
+    return Api.get({
+        path: `${apiDomain}/transport/invoiceJob?customerId=${customerId}&vat=${VAT}`,
+        options: {
+            method: 'GET',
+            timeout: 10000
+        }
+    })
+}
 
+export const generateInvoice = (payload) => {
+    return Api.post({
+        path : `${apiDomain}/transport/invoice`,
+        data : payload,
+        options : {}
+      })
+}
+
+export const getOutstandings = () => {
+    return Api.get({
+        path: `${apiDomain}/transport/outstanding`,
+        options: {
+            method: 'GET',
+            timeout: 10000
+        }
+    })
+}
+
+export const generateOutstanding = (customerId) => {
+    return Api.get({
+        path: `${apiDomain}/transport/customerOutstanding?customerId=${customerId}`,
+        options: {
+            method: 'GET',
+            timeout: 10000
+        }
+    })
+}
+
+export const generatePaymentReciept = (payload) => {
+    return Api.post({
+        path : `${apiDomain}/transport/paymentReceipt`,
+        data : payload,
+        options : {}
+      })
+}
 
 

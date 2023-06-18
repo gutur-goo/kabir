@@ -1,7 +1,8 @@
-import React from "react";
+import React, { useEffect, useRef } from "react";
 import "./OutstandingTemplate.css";
 import Header from "../../../assets/templateHeaders/OutstandingHeader.png";
 import Footer from "../../../assets/templateHeaders/InvoiceFooter.png";
+import { useReactToPrint } from "react-to-print";
 
 function numToWords(num) {
 	const ones = ['', 'One', 'Two', 'Three', 'Four', 'Five', 'Six', 'Seven', 'Eight', 'Nine'];
@@ -75,32 +76,70 @@ const tableData = [
 ];
 
 const OutstandingTemplate = () => {
+  const {
+    customerId='',
+      customerName='',
+      customerTRN='',
+      customerAddress='',
+      rowData='',
+      total='',
+  } = JSON.parse(localStorage.getItem('outstanding_data'));
 
-	let invoiceAmount = 0;
-	let taxableValue = 0;
-	let VATAmount = 0;
-	let grossAmount = 0;
+  const componentRef = useRef();
+  const handlePrint = useReactToPrint({
+    content: () => componentRef.current,
+  });
+
+  useEffect(() => {
+    handlePrint();
+  },[]);
+
+  localStorage.removeItem('outstanding_data')
+	// let invoiceAmount = 0;
+	// let taxableValue = 0;
+	// let VATAmount = 0;
+	// let grossAmount = 0;
+
+  // const handleDownload = () => {
+  //   const element = document.getElementById('html-content');
+  //   const opt = {
+  //     // margin: 1,
+  //     filename: 'OUTSTANDING.pdf',
+  //     image: { type: 'jpeg', quality: 1 },
+  //     html2canvas: { scale: 2 },
+  //     // jsPDF: { unit: 'in', format: 'letter', orientation: 'portrait' },
+  //   };
+  //   html2pdf().set(opt).from(element).save();
+  // };
+
+  // useEffect(() => {
+  //   handleDownload();
+  //   const timeout = setTimeout(() => {
+  //     window.close();
+  //   },1000);
+  //   return () => clearTimeout(timeout);
+  // },[]);
 
   return (
-    <div class="invoice-box">
-      <img src={Header} style={{ marginLeft: 40 }} />
+    <div class="invoice-box" id="html-content" ref={componentRef}>
+      <img src={Header}/>
       <div style={{ display: "flex", justifyContent: "space-between" }}>
         <div style={{ marginLeft: 30 }}>
           <p>
             <b>Customer :</b>{" "}
             <span
               style={{ width: "30%", marginLeft: 5 }}
-            >{`VTS Clima LLC`}</span>
+            >{customerName}</span>
           </p>
           <p style={{ display: "flex" }}>
             <b>Address :</b>
             <span
               style={{ width: "30%", marginLeft: 5 }}
-            >{`Middle East & Africa Regional Office, P.O Box #76849, Dubai, UAE`}</span>
+            >{customerAddress}</span>
           </p>
           <p>
             <b>Customer TRN : </b>
-            {`100067180800003`}
+            {customerTRN}
           </p>
         </div>
       </div>
@@ -112,20 +151,20 @@ const OutstandingTemplate = () => {
           <th>Amount</th>
           <th>No. of days</th>
         </tr>
-        {tableData.map((item, index) => {
-			invoiceAmount = invoiceAmount + parseInt(item.Rate)*parseInt(item.Qty);
-			taxableValue = taxableValue + (item.VAT == '5' ? parseInt(item.Rate)*parseInt(item.Qty) : 0) 
-			const vat = item.VAT == '0' ? 0 : (parseInt(item.Rate) * 0.05);
-			VATAmount = VATAmount + (vat*parseInt(item.Qty));
-			const total = (parseInt(item.Rate)*parseInt(item.Qty)) + (item.VAT == '0' ? 0 : (parseInt(item.Rate) * 0.05)*parseInt(item.Qty));
-			grossAmount = grossAmount + total;
+        {rowData.map((item, index) => {
+			// invoiceAmount = invoiceAmount + parseInt(item.Rate)*parseInt(item.Qty);
+			// taxableValue = taxableValue + (item.VAT == '5' ? parseInt(item.Rate)*parseInt(item.Qty) : 0) 
+			// const vat = item.VAT == '0' ? 0 : (parseInt(item.Rate) * 0.05);
+			// VATAmount = VATAmount + (vat*parseInt(item.Qty));
+			// const total = (parseInt(item.Rate)*parseInt(item.Qty)) + (item.VAT == '0' ? 0 : (parseInt(item.Rate) * 0.05)*parseInt(item.Qty));
+			// grossAmount = grossAmount + total;
 			return (
             <tr>
               <td>{index+1}</td>
-              <td>{item.invoiceNumber}</td>
+              <td>{item.invoiceNo}</td>
               <td>{item.invoiceDate}</td>
               <td>{item.amount}</td>
-              <td>{item.days}</td>
+              <td>{item.noOfDays}</td>
             </tr>
           );
         })}
@@ -133,11 +172,11 @@ const OutstandingTemplate = () => {
               <td></td>
               <td></td>
               <td>{`Total`}</td>
-              <td><b>{35154}</b></td>
+              <td><b>{total}</b></td>
             </tr>
       </table>
 	  <p style={{marginTop:20}}>{`Amount in words : ${numToWords(35154)} Dirhams`}</p>
-      <img src={Footer} style={{ marginLeft: 40,marginTop:70 }} />
+      <img src={Footer} style={{marginTop:70 }} />
     </div>
   );
 };

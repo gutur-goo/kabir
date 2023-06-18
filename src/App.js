@@ -2,7 +2,7 @@ import logo from './logo.svg';
 import React from 'react';
 import './App.css';
 import HeaderTabs from './components/TopNavigation/HeaderTabs';
-import { BrowserRouter, Routes, Route, Link } from 'react-router-dom'
+import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import Logo from './assets/images/satSahib.jpeg';
 import InvoiceTemplate from './components/Template/InvoiceTemplate/InvoiceTemplate';
 import SignIn from './components/Screens/LoginScreen/LoginScreen';
@@ -13,8 +13,8 @@ import OutstandingTemplate from './components/Template/OutstandingTemplate/Outst
 import Helmet from './components/Helmet/Helmet';
 
 function App() {
-  
-  const hashedPassAdmin = sha256('kabiradmin_kabiradmin'+new Date().getDate() + new Date().getMonth());
+
+  const hashedPassAdmin = sha256('kabirdev_kabirdev'+new Date().getDate() + new Date().getMonth());
   const hashedPassNormal = sha256('kabir_kabir'+new Date().getDate() + new Date().getMonth());
   const isMobile = typeof window != 'undefined' ? /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent) : false
   const login_token = window.sessionStorage.getItem('login_token') || '';
@@ -33,10 +33,10 @@ function App() {
       <Routes>
         {/* <Route exact path='/' element={<React.Fragment><img src={Logo} width={"20%"} /><HeaderTabs isMobile={isMobile} /></React.Fragment>}></Route> */}
         <Route exact path='/' element={loggedState != 'loggedOut' ? <div style={{backgroundColor:'rgb(255,227,148)',overflowX:isMobile ?'hidden' : null}}><img src={Logo} style={{marginLeft:isMobile ? '30%' : '43%',borderRadius:'70%'}} width={isMobile ? "30%" : "10%"} /><HeaderTabs isMobile={isMobile} isAdmin={isAdmin} /></div> :  <SignIn hashedPassAdmin={hashedPassAdmin} isMobile={isMobile} hashedPassNormal={hashedPassNormal} />}></Route>
-        {/* <Route exact path='/invoice' element={<InvoiceTemplate />}></Route>
+        <Route exact path='/invoice' element={<InvoiceTemplate />}></Route>
         <Route exact path='/paymentrc' element={<PaymentReceiptTemplate />}></Route>
         <Route exact path='/supporting' element={<SupportingListTemplate />}></Route>
-        <Route exact path='/outstanding' element={<OutstandingTemplate />}></Route> */}
+        <Route exact path='/outstanding' element={<OutstandingTemplate />}></Route>
       </Routes>
     </BrowserRouter>
     </React.Fragment>

@@ -91,6 +91,7 @@ const ExpensesScreen = () => {
       <DataGrid
         onRowClick={handleRowClick}
         rows={dummyData}
+        getRowId={(row) => row.jobId}
         columns={columns}
         pageSize={12}
         slots={{ toolbar: GridToolbar }}
