@@ -69,6 +69,10 @@ const dummyVATList = [{ name: "5",id: "5.00" }, { name: "0",id: "0.00" }]
 
 const dummyContainerSize = [
   {
+    id: "0",
+    name: "0"
+  },
+  {
     id: "20",
     name : "20",
   },
@@ -210,7 +214,7 @@ const CreateJob = ({
   const [containerSize, setContainerSize] = useState(
     editJob ? rowData.containerSize.includes('20') ? '20' : '40' : ""
   );
-  const [VAT, setVAT] = useState(editJob ? rowData.jobVAT : "5");
+  const [VAT, setVAT] = useState(editJob ? rowData.jobVAT : "5.00");
   const [registerForStatus, setRegisterForStatus] = useState(editJob ? rowData.registerContainer : false);
   const [showPopUp, setShowPopUp] = useState(false);
   const [popUpType, setPopUpType] = useState("");

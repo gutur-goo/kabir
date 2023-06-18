@@ -8,33 +8,34 @@ import { DatePicker, LocalizationProvider } from '@mui/x-date-pickers';
 import { DemoContainer } from '@mui/x-date-pickers/internals/demo';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import ContainedButton from '../../ContainedButton/ContainedButton';
+import { addExpense, addExpenseType, getExpensesTotal, getExpensesType } from '../../../services/Actions';
+import { Backdrop, CircularProgress } from '@mui/material';
+import InvoicePopUp from '../../InvoicePopUp/InvoicePopUp';
 
 const columns = [
   { field: 'id', headerName: 'S No.' , flex : 1},
-  { field: 'expenseType', headerName: 'Expense Type' , flex : 1},
-  { field: 'amount', headerName: 'Amount' , flex : 1},
-  { field: 'remarks', headerName: 'Remarks' , flex : 1},
-  { field: 'date', headerName: 'Date' , flex : 1},
+  { field: 'name', headerName: 'Expense Type' , flex : 1},
+  { field: 'total_amount', headerName: 'Amount' , flex : 1}
 ]
 
 const dummyData = [{ 
     id:'1', 
-  expenseType : 'Workshop',
-  amount : '400',
+  name : 'Workshop',
+  total_amount : '400',
   remarks : 'REGULAR MAINTAINANCE AT DXB WORKSHOP',
   date : '2023-03-02'
 },
 { 
     id:'2', 
-  expenseType : 'Toll',
-  amount : '100',
+  name : 'Toll',
+  total_amount : '100',
   remarks : 'TOLL AT DXB ABU DHABI HGHWY',
   date : '2023-03-22'
 },
 { 
     id:'3', 
-  expenseType : 'Diesel',
-  amount : '2200',
+  name : 'Diesel',
+  total_amount : '2200',
   remarks: '2ND WEEK DIESEL',
   date : '2023-03-14'
 }];
@@ -48,50 +49,115 @@ const dummyType = [
 const ExpensesScreen = () => {
 
   const [editContainerStatus,setEditContainerStatus] = useState(false);
+  const [showModal,setShowModal] = useState(false);
   const [rowData,setRowData] = useState({});
+
+  const [expenseTypes,setExpenseTypes] = useState([]);
+  const [totalExpenses,setTotalExpenses] = useState([]);
+  const [selectedExpenseType,setSelectedExpenseType] = useState("");
+  const [amount,setAmount] = useState("");
+  const [remarks,setRemarks] = useState("");
+  const [expenseDate,setExpenseDate] = useState(null);
+  const [showLoader,setShowLoader] = useState(true);
 
   const handleRowClick = (e) => {
     setRowData(e.row);
-    setEditContainerStatus(true);
+    setShowModal(true);
   }
+
+  const getData = () => {
+    getExpensesTotal().then(res => {
+      console.log("res 1 -> ",res);
+      setTotalExpenses(res.data);
+    }).catch(err => console.log(err));
+    getExpensesType().then(res => {
+      console.log("res 2 -> ",res);
+      setExpenseTypes(res.data);
+      setShowLoader(false);
+    }).catch(err => console.log(err));
+  }
+
+  useEffect(() => {
+    getData();
+  },[]);
 
   const CalenderSelect = ({label,handleChange,value}) => {
     return (
       <div style={{ marginTop: 10 , marginLeft : 30,backgroundColor:'white'}}>
       <LocalizationProvider dateAdapter={AdapterDayjs}>
       <DemoContainer components={['DatePicker']}>
-        <DatePicker value={value} label={label} onChange={e => {handleChange(e.$d)}} />
+        <DatePicker value={value} label={label} onChange={e => {handleChange(e)}} />
       </DemoContainer>
     </LocalizationProvider>
     </div>
     )
   }
 
+  const addnewExpenseType = (data) => {
+    const payload = {
+      ExpenseTypeName : data.name
+    }
+    setShowLoader(true);
+    addExpenseType(payload).then(res => {
+      setShowLoader(false);
+      getData();
+    });
+    setEditContainerStatus(false);
+  }
+
+  const submitExpense = () => {
+    const payload = {
+      expenseTypeId : selectedExpenseType,
+      amount : amount,
+      date : expenseDate.$D+"-"+(expenseDate.$M+1)+"-"+expenseDate.$y,
+      remarks : remarks
+    }
+    addExpense(payload).then(res => {
+      setShowLoader(true);
+      getData();
+    })
+  }
+
   return (
     <React.Fragment>
-    {editContainerStatus && <PopUp popUpType = {'Expense Type'} handleClick={() => {setEditContainerStatus(false)}} /> }
+      <Backdrop
+        sx={{ color: "#fff", zIndex: (theme) => theme.zIndex.drawer + 1 }}
+        open={showLoader}
+        // onClick={handleClose}
+      >
+        <CircularProgress color="inherit" />
+      </Backdrop>
+      {showModal && <InvoicePopUp handleClose={() => {setShowModal(false)}} rowData={rowData} notInvoice={true} style={{padding:10,position:'absolute',backgroundColor:'white',top:'10%',width:'70%',left:'12%'}} /> }
+    {editContainerStatus && <PopUp manageNewEntries={addnewExpenseType} popUpType = {'Expense Type'} handleClick={() => {setEditContainerStatus(false)}} /> }
     <h1 style={{display:'flex',justifyContent:'center'}}>EXPENSES</h1>
     <div style={{display:'flex',flexDirection:'row'}}>
     <div style={{flex:1,width:'30%'}}>
-        <h3 style={{marginLeft:25}}>Add a new expense</h3>
+        <h3 style={{marginLeft:25}}>Add a New Expense</h3>
         <div style={{width:'300%',display:'flex',flexDirection:'row'}}>
-        <DropDown label={`Expense Type`} data={dummyType}  />
+        <DropDown label={`Expense Type`}
+          value={selectedExpenseType}
+          handleChange={setSelectedExpenseType}
+          data={expenseTypes}  
+          isID={true}
+          />
         <div style={{marginTop:15}}>
         <ContainedButton label={`Add new Expense Type`} handleClick={() => {setEditContainerStatus(true)}} />
         </div>
         </div>
-        <TextInput label={`Amount`} />
-        <TextInput label={`Remarks`} />
-        <CalenderSelect lable={`Expense Date`} handleChange={null} />
+        <div style={{width:'45%'}}>
+        <TextInput value={amount} handleChange={setAmount} label={`Amount`} />
+        <TextInput value={remarks} handleChange={setRemarks} label={`Remarks`} />
+        <CalenderSelect value={expenseDate} label={`Expense Date`} handleChange={setExpenseDate} />
+        </div>
         <div style={{marginLeft:20,marginTop:10}}>
-        <ContainedButton label={`Submit Expense`} />
+        <ContainedButton label={`Submit Expense`} handleClick={submitExpense} />
         </div>
     </div>
     <div style={{ height: 700, width: '70%' }}>
       <DataGrid
         onRowClick={handleRowClick}
-        rows={dummyData}
-        getRowId={(row) => row.jobId}
+        rows={totalExpenses}
+        getRowId={(row) => row.id}
         columns={columns}
         pageSize={12}
         slots={{ toolbar: GridToolbar }}

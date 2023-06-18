@@ -211,4 +211,48 @@ export const generatePaymentReciept = (payload) => {
       })
 }
 
+export const getExpensesType = () => {
+    return Api.get({
+        path: `${apiDomain}/transport/expenseType`,
+        options: {
+            method: 'GET',
+            timeout: 10000
+        }
+    })
+}
 
+export const addExpenseType = (payload) => {
+    return Api.post({
+        path : `${apiDomain}/transport/expenseType`,
+        data : payload,
+        options : {}
+      })
+}
+
+export const addExpense = (payload) => {
+    return Api.post({
+        path : `${apiDomain}/transport/expense`,
+        data : payload,
+        options : {}
+      })
+}
+
+export const getExpensesOfType = (expense_type) => {
+    return Api.get({
+        path: `${apiDomain}/transport/expense?expense_type=${expense_type}`,
+        options: {
+            method: 'GET',
+            timeout: 10000
+        }
+    })
+}
+
+export const getExpensesTotal = () => {
+    return Api.get({
+        path: `${apiDomain}/transport/expTypeTotal`,
+        options: {
+            method: 'GET',
+            timeout: 10000
+        }
+    })
+}

@@ -1,11 +1,11 @@
-import { Box, Modal, Typography } from "@mui/material";
-import React, { useCallback, useState } from "react";
+import { Backdrop, Box, CircularProgress, Modal, Typography } from "@mui/material";
+import React, { useCallback, useEffect, useState } from "react";
 import ContainedButton from "../ContainedButton/ContainedButton";
-import { DataGrid } from '@mui/x-data-grid';
+import { DataGrid,GridToolbar } from '@mui/x-data-grid';
 import { DatePicker, LocalizationProvider } from "@mui/x-date-pickers";
 import { DemoContainer } from "@mui/x-date-pickers/internals/demo";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
-import { generateInvoice } from "../../services/Actions";
+import { generateInvoice, getExpensesOfType } from "../../services/Actions";
 import DropDown from "../DropDown/DropDown";
 
 const columns = [
@@ -36,6 +36,13 @@ const columns = [
   { field: "jobVAT", headerName: "VAT" },
 ];
 
+const columnsForExpenseData = [
+  { field: "id", headerName: "S No." ,flex : 1},
+  { field: "remarks", headerName: "Remarks" ,flex : 1},
+  { field: "amount", headerName: "Amount" ,flex : 1},
+  { field: "date", headerName: "Date" ,flex : 1}
+]
+
 const vatData = [
   {
     name : "5 %",
@@ -47,11 +54,23 @@ const vatData = [
   }
 ]
 
-const InvoicePopUp = ({handleClose,style,jobsListForInvoicing = [],customerData = {},setVATVisible}) => {
+const InvoicePopUp = ({handleClose,style,jobsListForInvoicing = [],customerData = {},setVATVisible,notInvoice=false,rowData}) => {
 
   const [selectedJobs,setSelectedJobs] = useState([]);
   const [invoiceDate,setInvoiceDate] = useState();
   const [vatType,setVatType] = useState(true);
+  const [expenseTypeData,setExpenseTypeData] = useState([]);
+  const [showLoader,setShowLoader] = useState(true);
+
+  useEffect(() => {
+    if(notInvoice)
+    {
+      getExpensesOfType(rowData.id).then(res => {
+        setExpenseTypeData(res.data);
+        setShowLoader(false);
+      })
+    }
+  },[]);
 
   const generateInvoiceFromJobs = () => {
     const payload = {
@@ -116,6 +135,8 @@ const InvoicePopUp = ({handleClose,style,jobsListForInvoicing = [],customerData 
       );
     };
 
+    console.log("columnsForExpenseData ----> ",expenseTypeData)
+
   return (
       <Modal
         open={true}
@@ -123,7 +144,7 @@ const InvoicePopUp = ({handleClose,style,jobsListForInvoicing = [],customerData 
         aria-labelledby="modal-modal-title"
         aria-describedby="modal-modal-description"
       >
-        <Box sx={style}>
+        {!notInvoice ? <Box sx={style}>
           <Typography id="modal-modal-title" variant="h6" component="h2">
             Select Jobs
           </Typography>
@@ -143,6 +164,30 @@ const InvoicePopUp = ({handleClose,style,jobsListForInvoicing = [],customerData 
             />
           </div>
         </Box>
+      :
+      <Box sx={style}>
+        <Backdrop
+        sx={{ color: "#fff", zIndex: (theme) => theme.zIndex.drawer + 1 }}
+        open={showLoader}
+        // onClick={handleClose}
+      >
+        <CircularProgress color="inherit" />
+      </Backdrop>
+          <Typography id="modal-modal-title" variant="h6" component="h2">
+            {`All Expenses against ${rowData.name}`}
+          </Typography>
+          <div style={{ height: 400, width: "100%" ,marginTop:10}}>
+          <DataGrid
+          // onRowClick={handleRowClick}
+          rows={expenseTypeData}
+          getRowId={(row) => row.id}
+          columns={columnsForExpenseData}
+          pageSize={12}
+          slots={{ toolbar: GridToolbar }}
+        />
+        </div>
+        </Box>  
+      }
       </Modal>
     )
 }
