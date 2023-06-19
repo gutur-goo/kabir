@@ -256,3 +256,49 @@ export const getExpensesTotal = () => {
         }
     })
 }
+
+export const getPaymentType = () => {
+    return Api.get({
+        path: `${apiDomain}/transport/paymentType`,
+        options: {
+            method: 'GET',
+            timeout: 10000
+        }
+    })
+}
+
+export const addPaymentType = (payload) => {
+    return Api.post({
+        path : `${apiDomain}/transport/paymentType`,
+        data : payload,
+        options : {}
+      })
+}
+
+export const addPayment = (payload) => {
+    return Api.post({
+        path : `${apiDomain}/transport/payment`,
+        data : payload,
+        options : {}
+      })
+}
+
+export const getPaymentsOfType = (payment_type) => {
+    return Api.get({
+        path: `${apiDomain}/transport/payment?payment_type=${payment_type}`,
+        options: {
+            method: 'GET',
+            timeout: 10000
+        }
+    })
+}
+
+export const getPaymentsTotal = () => {
+    return Api.get({
+        path: `${apiDomain}/transport/payTypeTotal`,
+        options: {
+            method: 'GET',
+            timeout: 10000
+        }
+    })
+}

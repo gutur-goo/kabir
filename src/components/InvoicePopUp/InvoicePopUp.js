@@ -5,7 +5,7 @@ import { DataGrid,GridToolbar } from '@mui/x-data-grid';
 import { DatePicker, LocalizationProvider } from "@mui/x-date-pickers";
 import { DemoContainer } from "@mui/x-date-pickers/internals/demo";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
-import { generateInvoice, getExpensesOfType } from "../../services/Actions";
+import { generateInvoice, getExpensesOfType, getPaymentsOfType } from "../../services/Actions";
 import DropDown from "../DropDown/DropDown";
 
 const columns = [
@@ -54,7 +54,7 @@ const vatData = [
   }
 ]
 
-const InvoicePopUp = ({handleClose,style,jobsListForInvoicing = [],customerData = {},setVATVisible,notInvoice=false,rowData}) => {
+const InvoicePopUp = ({handleClose,style,jobsListForInvoicing = [],customerData = {},setVATVisible,notInvoice=false,rowData,isPayment=false}) => {
 
   const [selectedJobs,setSelectedJobs] = useState([]);
   const [invoiceDate,setInvoiceDate] = useState();
@@ -65,6 +65,13 @@ const InvoicePopUp = ({handleClose,style,jobsListForInvoicing = [],customerData 
   useEffect(() => {
     if(notInvoice)
     {
+      if(isPayment)
+      {
+        getPaymentsOfType(rowData.id).then(res => {
+          setExpenseTypeData(res.data);
+          setShowLoader(false);
+        })
+      }
       getExpensesOfType(rowData.id).then(res => {
         setExpenseTypeData(res.data);
         setShowLoader(false);
