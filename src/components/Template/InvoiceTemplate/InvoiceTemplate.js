@@ -1,7 +1,7 @@
 import React, { useEffect, useRef } from "react";
 import "./InvoiceTemplate.css";
-import Header from "../../../assets/templateHeaders/InvoiceHeader.png";
-import Footer from "../../../assets/templateHeaders/InvoiceFooter.png";
+import Header from "../../../assets/templateHeaders/InvoiceHeader.jpg";
+import Footer from "../../../assets/templateHeaders/InvoiceFooter.jpg";
 import html2pdf from "html2pdf.js";
 import {connect} from 'react-redux';
 import { useReactToPrint } from "react-to-print";
@@ -109,20 +109,20 @@ localStorage.removeItem('invoice_data');
 	// let VATAmount = 0;
 	// let grossAmount = 0;
 
-  const componentRef = useRef();
-  const handlePrint = useReactToPrint({
-    content: () => componentRef.current,
-  });
+  // const componentRef = useRef();
+  // const handlePrint = useReactToPrint({
+  //   content: () => componentRef.current,
+  // });
 
-  useEffect(() => {
-    handlePrint();
-  },[]);
+  // useEffect(() => {
+  //   // handlePrint();
+  // },[]);
 
   const handleDownload = () => {
     const element = document.getElementById('html-content');
     const opt = {
       // margin: 1,
-      filename: 'INV178384.pdf',
+      filename: `${invoiceNo}.pdf`,
       image: { type: 'jpeg', quality: 1 },
       html2canvas: { scale: 2 },
       // jsPDF: { unit: 'in', format: 'letter', orientation: 'portrait' },
@@ -131,16 +131,17 @@ localStorage.removeItem('invoice_data');
   };
 
   useEffect(() => {
-    // handleDownload();
-    // const timeout = setTimeout(() => {
-    //   window.close();
-    // },1000);
-    // return () => clearTimeout(timeout);
+    handleDownload();
+    const timeout = setTimeout(() => {
+      window.close();
+    },1000);
+    return () => clearTimeout(timeout);
   },[]);
 
   return (
-    <div class="invoice-box" id="html-content" ref={componentRef}>
-      <img src={Header} />
+    <div class="invoice-box" id="html-content">
+      <img src={Header} style={{width:'100%'}} />
+      <h1 style={{display:'flex',justifyContent:'center',marginBottom:30,marginTop:30}}>TAX INVOICE</h1>
       <div style={{ display: "flex", justifyContent: "space-between" }}>
         <div style={{ marginLeft: 30 }}>
           <p>
@@ -242,7 +243,7 @@ localStorage.removeItem('invoice_data');
             </tr>
       </table>
 	  <p style={{marginTop:20}}>{`Amount in words : ${numToWords(grossAmount)} Dirhams`}</p>
-      <img src={Footer} style={{ marginTop:70 }} />
+      <img src={Footer} style={{ marginTop:70,width:'100%' }} />
     </div>
   );
 };

@@ -165,7 +165,7 @@ const CreateJob = ({
       doVal: doValue === null || isNaN(doValue.$D) ? (editJob ? rowData.doVal : "") : (doValue.$D+"-"+(doValue.$M+1)+"-"+doValue.$y),
       storage: storage === null || isNaN(storage.$D) ? (editJob ? rowData.storage : "") : storage.$D+"-"+(storage.$M+1)+"-"+storage.$y,
       containerSize: containerSize,
-      jobVAT: VAT === "5" ? 5 : 0,
+      jobVAT: VAT === "5.00" ? 5 : 0,
       registerContainer: editJob ? rowData.registerContainer : registerForStatus ? "True" : "False",
     };
     // console.log("Payload -> ",payload)

@@ -1,7 +1,7 @@
 import React, { useEffect, useRef } from "react";
 import "./SupportingList.css";
-import Header from "../../../assets/templateHeaders/InvoiceHeader.png";
-import Footer from "../../../assets/templateHeaders/InvoiceFooter.png";
+import Header from "../../../assets/templateHeaders/InvoiceHeader.jpg";
+import Footer from "../../../assets/templateHeaders/InvoiceFooter.jpg";
 import Logo from "../../../assets/images/logo.png";
 import html2pdf from "html2pdf.js";
 import { useReactToPrint } from "react-to-print";
@@ -249,20 +249,20 @@ const SupportingListTemplate = (props) => {
 
   localStorage.removeItem('supporting_data');
 
-  const componentRef = useRef();
-  const handlePrint = useReactToPrint({
-    content: () => componentRef.current,
-  });
+  // const componentRef = useRef();
+  // const handlePrint = useReactToPrint({
+  //   content: () => componentRef.current,
+  // });
 
-  useEffect(() => {
-    handlePrint();
-  },[]);
+  // useEffect(() => {
+  //   handlePrint();
+  // },[]);
 
   const handleDownload = () => {
     const element = document.getElementById("html-content");
     const opt = {
       // margin: 1,
-      filename: "SUPPORT_INV178384.pdf",
+      filename: `SUPPORT_${invoiceNo}.pdf`,
       image: { type: "jpeg", quality: 1 },
       html2canvas: { scale: 2 },
       // jsPDF: { unit: 'in', format: 'letter', orientation: 'portrait' },
@@ -270,13 +270,13 @@ const SupportingListTemplate = (props) => {
     html2pdf().set(opt).from(element).save();
   };
 
-  // useEffect(() => {
-  //   handleDownload();
-  //   const timeout = setTimeout(() => {
-  //     window.close();
-  //   }, 1000);
-  //   return () => clearTimeout(timeout);
-  // }, []);
+  useEffect(() => {
+    handleDownload();
+    const timeout = setTimeout(() => {
+      window.close();
+    }, 1000);
+    return () => clearTimeout(timeout);
+  }, []);
 
   return (
     <div
@@ -288,10 +288,9 @@ const SupportingListTemplate = (props) => {
         // justifyContent: "center",
         flexDirection: "column",
       }}
-      ref={componentRef}
     >
-      <img src={Logo} />
-      <h2>Supporting list</h2>
+      <img src={Header} style={{width:'100%'}} />
+      <h1 style={{marginTop:30,marginBottom:30}}>SUPPORTING LIST</h1>
       <div>
           <p>
             <b>Customer :</b>
@@ -340,6 +339,7 @@ const SupportingListTemplate = (props) => {
           );
         })}
       </table>
+      <img src={Footer} style={{width:'100%',marginTop:40}} />
     </div>
   );
 };

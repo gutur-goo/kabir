@@ -1,9 +1,10 @@
 import React, { useEffect, useRef } from "react";
 import "./PaymentRecieptTemplate.css";
-import Header from "../../../assets/templateHeaders/InvoiceHeader.png";
-import Footer from "../../../assets/templateHeaders/InvoiceFooter.png";
+import Header from "../../../assets/templateHeaders/InvoiceHeader.jpg";
+import Footer from "../../../assets/templateHeaders/InvoiceFooter.jpg";
 import Logo from "../../../assets/images/logo.png";
 import { useReactToPrint } from "react-to-print";
+import html2pdf from "html2pdf.js";
 
 function numToWords(num) {
   const ones = [
@@ -132,32 +133,49 @@ const PaymentReceiptTemplate = React.forwardRef((props, ref) => {
 
   localStorage.removeItem('payment_data');
 
-  const componentRef = useRef();
-  const handlePrint = useReactToPrint({
-    content: () => componentRef.current,
-  });
+  const handleDownload = () => {
+    const element = document.getElementById('html-content');
+    const opt = {
+      // margin: 1,
+      filename: `PAYMENT_${invoiceNumber}.pdf`,
+      image: { type: 'jpeg', quality: 1 },
+      html2canvas: { scale: 2 },
+      // jsPDF: { unit: 'in', format: 'letter', orientation: 'portrait' },
+    };
+    html2pdf().set(opt).from(element).save();
+  };
 
   useEffect(() => {
-    handlePrint();
+    handleDownload();
+    const timeout = setTimeout(() => {
+      window.close();
+    },1000);
+    return () => clearTimeout(timeout);
   },[]);
+
+  // const componentRef = useRef();
+  // const handlePrint = useReactToPrint({
+  //   content: () => componentRef.current,
+  // });
+
+  // useEffect(() => {
+  //   handlePrint();
+  // },[]);
 
   return (
     <div
       class="invoice-box"
+      id='html-content'
       style={{
         display: "flex",
         alignItems: "center",
         // justifyContent: "center",
         flexDirection: "column",
       }}
-      ref={componentRef}
     >
-      <img src={Logo} />
-      <h2>Payment Reciept</h2>
+      <img src={Header} style={{width:'100%'}} />
+      <h1 style={{marginTop:30,marginBottom:30}}>PAYMENT RECIEPT</h1>
       <div
-      style={{
-        marginLeft:'20%'
-      }}
       >
       <p>Customer Name : <span><b>{customerName}</b></span></p>
       <p>Invoice No : <span><b>{invoiceNumber}</b></span></p>
@@ -169,6 +187,7 @@ const PaymentReceiptTemplate = React.forwardRef((props, ref) => {
       <p>Method Ref# : <span><b>{methodReference}</b></span></p>
       </div>
       <h4>The above payment has been recieved</h4>
+      <img src={Footer} style={{width:'100%' , marginTop:30}} />
     </div>
   );
 });

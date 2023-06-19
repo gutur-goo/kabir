@@ -1,8 +1,9 @@
 import React, { useEffect, useRef } from "react";
 import "./OutstandingTemplate.css";
-import Header from "../../../assets/templateHeaders/OutstandingHeader.png";
-import Footer from "../../../assets/templateHeaders/InvoiceFooter.png";
+import Header from "../../../assets/templateHeaders/InvoiceHeader.jpg";
+import Footer from "../../../assets/templateHeaders/InvoiceFooter.jpg";
 import { useReactToPrint } from "react-to-print";
+import html2pdf from "html2pdf.js";
 
 function numToWords(num) {
 	const ones = ['', 'One', 'Two', 'Three', 'Four', 'Five', 'Six', 'Seven', 'Eight', 'Nine'];
@@ -85,44 +86,45 @@ const OutstandingTemplate = () => {
       total='',
   } = JSON.parse(localStorage.getItem('outstanding_data'));
 
-  const componentRef = useRef();
-  const handlePrint = useReactToPrint({
-    content: () => componentRef.current,
-  });
+  // const componentRef = useRef();
+  // const handlePrint = useReactToPrint({
+  //   content: () => componentRef.current,
+  // });
 
-  useEffect(() => {
-    handlePrint();
-  },[]);
+  // useEffect(() => {
+  //   handlePrint();
+  // },[]);
 
-  localStorage.removeItem('outstanding_data')
+  // localStorage.removeItem('outstanding_data')
 	// let invoiceAmount = 0;
 	// let taxableValue = 0;
 	// let VATAmount = 0;
 	// let grossAmount = 0;
 
-  // const handleDownload = () => {
-  //   const element = document.getElementById('html-content');
-  //   const opt = {
-  //     // margin: 1,
-  //     filename: 'OUTSTANDING.pdf',
-  //     image: { type: 'jpeg', quality: 1 },
-  //     html2canvas: { scale: 2 },
-  //     // jsPDF: { unit: 'in', format: 'letter', orientation: 'portrait' },
-  //   };
-  //   html2pdf().set(opt).from(element).save();
-  // };
+  const handleDownload = () => {
+    const element = document.getElementById('html-content');
+    const opt = {
+      // margin: 1,
+      filename: `OUTSTANDING_${customerName}.pdf`,
+      image: { type: 'jpeg', quality: 1 },
+      html2canvas: { scale: 2 },
+      // jsPDF: { unit: 'in', format: 'letter', orientation: 'portrait' },
+    };
+    html2pdf().set(opt).from(element).save();
+  };
 
-  // useEffect(() => {
-  //   handleDownload();
-  //   const timeout = setTimeout(() => {
-  //     window.close();
-  //   },1000);
-  //   return () => clearTimeout(timeout);
-  // },[]);
+  useEffect(() => {
+    handleDownload();
+    const timeout = setTimeout(() => {
+      window.close();
+    },1000);
+    return () => clearTimeout(timeout);
+  },[]);
 
   return (
-    <div class="invoice-box" id="html-content" ref={componentRef}>
-      <img src={Header}/>
+    <div class="invoice-box" id="html-content" >
+      <img src={Header} style={{width:'100%'}}/>
+      <h1 style={{display:'flex',justifyContent:'center',marginBottom:30,marginTop:30}}>OUTSTANDING STATEMENT</h1>
       <div style={{ display: "flex", justifyContent: "space-between" }}>
         <div style={{ marginLeft: 30 }}>
           <p>
@@ -176,7 +178,7 @@ const OutstandingTemplate = () => {
             </tr>
       </table>
 	  <p style={{marginTop:20}}>{`Amount in words : ${numToWords(35154)} Dirhams`}</p>
-      <img src={Footer} style={{marginTop:70 }} />
+      <img src={Footer} style={{width:'100%',marginTop:40}} />
     </div>
   );
 };
