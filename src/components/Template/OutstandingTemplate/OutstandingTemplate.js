@@ -115,10 +115,10 @@ const OutstandingTemplate = () => {
 
   useEffect(() => {
     handleDownload();
-    const timeout = setTimeout(() => {
-      window.close();
-    },1000);
-    return () => clearTimeout(timeout);
+    // const timeout = setTimeout(() => {
+    //   window.close();
+    // },1000);
+    // return () => clearTimeout(timeout);
   },[]);
 
   return (

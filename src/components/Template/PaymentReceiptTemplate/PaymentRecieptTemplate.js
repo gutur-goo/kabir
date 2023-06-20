@@ -147,10 +147,10 @@ const PaymentReceiptTemplate = React.forwardRef((props, ref) => {
 
   useEffect(() => {
     handleDownload();
-    const timeout = setTimeout(() => {
-      window.close();
-    },1000);
-    return () => clearTimeout(timeout);
+    // const timeout = setTimeout(() => {
+    //   window.close();
+    // },1000);
+    // return () => clearTimeout(timeout);
   },[]);
 
   // const componentRef = useRef();
