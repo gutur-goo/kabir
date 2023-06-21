@@ -100,6 +100,7 @@ const {
   customerTRN='',
   invoiceDate='',
   invoiceNo='',
+  customerAddress=''
 } = JSON.parse(localStorage.getItem('invoice_data'));
 
 localStorage.removeItem('invoice_data');
@@ -154,7 +155,7 @@ localStorage.removeItem('invoice_data');
             <b>Address :</b>
             <span
               style={{ width: "30%", marginLeft: 5 }}
-            >{`Middle East & Africa Regional Office, P.O Box #76849, Dubai, UAE`}</span>
+            >{customerAddress}</span>
           </p>
           <p>
             <b>Customer TRN : </b>
