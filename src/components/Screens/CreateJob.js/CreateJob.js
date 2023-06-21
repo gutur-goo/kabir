@@ -88,50 +88,53 @@ const CreateJob = ({
 
 
   const getAllData = () => {
-    const promises = [
-      getCustomerData(),
-      getJobTypeData(),
-      getReferenceData(),
-      getTransporterData(),
-      getDriverData(),
-      getVehicleData(),
-      getFromData(),
-      getToData()
-    ];
-    Promise.allSettled(promises)
-      .then((res) => {
-        res.forEach((result, index) => {
-          switch (index) {
-            case 0:
-              setCustomerList(result.value.data);
-              break;
-            case 1:
-              setJobTypeList(result.value.data);
-              break;
-            case 2:
-              setReferenceList(result.value.data);
-              break;
-            case 3:
-              setTransportList(result.value.data);
-              break;
-            case 4:
-              setDriverList(result.value.data);
-              break;
-            case 5:
-              setVehicleList(result.value.data);
-              break;
-            case 6:
-              setPickData(result.value.data);
-            case 7:
-              setDropData(result.value.data);
-              setShowLoader(false);
-              break;
-          }
+    const timeout = setTimeout(() => {
+      const promises = [
+        getCustomerData(),
+        getJobTypeData(),
+        getReferenceData(),
+        getTransporterData(),
+        getDriverData(),
+        getVehicleData(),
+        getFromData(),
+        getToData()
+      ];
+      Promise.allSettled(promises)
+        .then((res) => {
+          res.forEach((result, index) => {
+            switch (index) {
+              case 0:
+                setCustomerList(result.value.data);
+                break;
+              case 1:
+                setJobTypeList(result.value.data);
+                break;
+              case 2:
+                setReferenceList(result.value.data);
+                break;
+              case 3:
+                setTransportList(result.value.data);
+                break;
+              case 4:
+                setDriverList(result.value.data);
+                break;
+              case 5:
+                setVehicleList(result.value.data);
+                break;
+              case 6:
+                setPickData(result.value.data);
+              case 7:
+                setDropData(result.value.data);
+                setShowLoader(false);
+                break;
+            }
+          });
+        })
+        .catch((err) => {
+          console.log(err);
         });
-      })
-      .catch((err) => {
-        console.log(err);
-      });
+    }, 500);
+    return () => timeout;
   }
 
   useEffect(() => {
