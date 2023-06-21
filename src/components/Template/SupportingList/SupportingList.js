@@ -1,7 +1,7 @@
 import React, { useEffect, useRef } from "react";
 import "./SupportingList.css";
-import Header from "../../../assets/templateHeaders/InvoiceHeader.jpg";
-import Footer from "../../../assets/templateHeaders/InvoiceFooter.jpg";
+import Header from "../../../assets/templateHeaders/InvoiceHeader.webp";
+import Footer from "../../../assets/templateHeaders/InvoiceFooter.webp";
 import Logo from "../../../assets/images/logo.png";
 import html2pdf from "html2pdf.js";
 import { useReactToPrint } from "react-to-print";
