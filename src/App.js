@@ -14,7 +14,7 @@ import Helmet from './components/Helmet/Helmet';
 
 function App() {
 
-  const hashedPassAdmin = sha256('kabirdev_kabirdev'+new Date().getDate() + new Date().getMonth());
+  const hashedPassAdmin = sha256('kabiradmin_kabiradmin'+new Date().getDate() + new Date().getMonth());
   const hashedPassNormal = sha256('kabir_kabir'+new Date().getDate() + new Date().getMonth());
   const isMobile = typeof window != 'undefined' ? /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent) : false
   const login_token = window.sessionStorage.getItem('login_token') || '';
