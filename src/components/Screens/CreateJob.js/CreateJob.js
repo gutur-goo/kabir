@@ -66,6 +66,7 @@ const dummyContainerStatus = [
 ];
 
 const dummyVATList = [{ name: "5",id: "5.00" }, { name: "0",id: "0.00" }]
+const dummyStatusList = [{ name: "Yes",id: true }, { name: "No",id: false }]
 
 const dummyContainerSize = [
   {
@@ -169,7 +170,7 @@ const CreateJob = ({
       storage: storage === null || isNaN(storage.$D) ? (editJob ? rowData.storage : "") : storage.$D+"-"+(storage.$M+1)+"-"+storage.$y,
       containerSize: containerSize,
       jobVAT: VAT === "5.00" ? 5 : 0,
-      registerContainer: editJob ? rowData.registerContainer : registerForStatus ? "True" : "False",
+      registerContainer: registerForStatus  ? "True" : "False",
     };
     // console.log("Payload -> ",payload)
     postJobData(payload).then(res => {
@@ -639,7 +640,7 @@ const CreateJob = ({
               handleChange={setVAT}
               value={VAT}
             />
-            <div style={{ marginLeft: 30, marginTop: 25 }}>
+            {/* <div style={{ marginLeft: 30, marginTop: 25 }}>
               <FormControlLabel
                 onChange={() => {
                   setRegisterForStatus(!registerForStatus);
@@ -647,7 +648,13 @@ const CreateJob = ({
                 control={<Checkbox />}
                 label="Register for Container Status"
               />
-            </div>
+            </div> */}
+            <DropDown
+              label={"Register for Container Status"}
+              data={dummyStatusList}
+              handleChange={setRegisterForStatus}
+              value={registerForStatus}
+            />
         </div>
         <Buttons />
       </div>
@@ -881,15 +888,22 @@ const CreateJob = ({
               handleChange={setVAT}
               value={VAT}
             />
-            <div style={{ marginLeft: 10, marginTop: 25 }}>
-              <FormControlLabel
-                onChange={() => {
+            {/* <div style={{ marginLeft: 10, marginTop: 25 }}> */}
+              {/* <FormControlLabel
+                onChange={(e) => {
+                  console.log("e --------> ",e)
                   setRegisterForStatus(!registerForStatus);
                 }}
-                control={<Checkbox />}
+                control={<Checkbox onChange={e => console.log("Eeeeeeeeeee- > ")} />}
                 label="Register for Container Status"
-              />
-            </div>
+              /> */}
+              <DropDown
+              label={"Register for Container Status"}
+              data={dummyStatusList}
+              handleChange={setRegisterForStatus}
+              value={registerForStatus}
+            />
+            {/* </div> */}
         </div>
         <Buttons />
       </div>}
