@@ -84,6 +84,7 @@ const OutstandingTemplate = () => {
       customerAddress='',
       rowData='',
       total='',
+      totalAmountInWords=''
   } = JSON.parse(localStorage.getItem('outstanding_data'));
 
   // const componentRef = useRef();
@@ -177,7 +178,7 @@ const OutstandingTemplate = () => {
               <td><b>{total}</b></td>
             </tr>
       </table>
-	  <p style={{marginTop:20}}>{`Amount in words : ${numToWords(35154)} Dirhams`}</p>
+	  <p style={{marginTop:20}}>{`Amount in words : ${totalAmountInWords}`}</p>
       <img src={Footer} style={{width:'100%',marginTop:40}} />
     </div>
   );

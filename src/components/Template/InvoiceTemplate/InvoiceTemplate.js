@@ -100,7 +100,8 @@ const {
   customerTRN='',
   invoiceDate='',
   invoiceNo='',
-  customerAddress=''
+  customerAddress='',
+  grossAmountInWords= '',
 } = JSON.parse(localStorage.getItem('invoice_data'));
 
 localStorage.removeItem('invoice_data');
@@ -243,7 +244,7 @@ localStorage.removeItem('invoice_data');
               <td><b>{`AED ${grossAmount}`}</b></td>
             </tr>
       </table>
-	  <p style={{marginTop:20}}>{`Amount in words : ${numToWords(grossAmount)} Dirhams`}</p>
+	  <p style={{marginTop:20}}>{`Amount in words : ${grossAmountInWords}`}</p>
       <img src={Footer} style={{ marginTop:70,width:'100%' }} />
     </div>
   );
