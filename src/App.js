@@ -33,8 +33,8 @@ function App() {
     than rendering all matching routes. */}
       <Routes>
         {/* <Route exact path='/' element={<React.Fragment><img src={Logo} width={"20%"} /><HeaderTabs isMobile={isMobile} /></React.Fragment>}></Route> */}
-        {/* <Route exact path='/' element={loggedState != 'loggedOut' ? <div style={{backgroundColor:'rgb(255,227,148)',overflowX:isMobile ?'hidden' : null}}><img src={Logo} style={{marginLeft:isMobile ? '30%' : '43%',borderRadius:'70%'}} width={isMobile ? "30%" : "10%"} /><HeaderTabs isMobile={isMobile} isAdmin={isAdmin} /></div> :  <SignIn hashedPassAdmin={hashedPassAdmin} isMobile={isMobile} hashedPassNormal={hashedPassNormal} />}></Route> */}
-        <Route exact path='/' element={<Disabled />}></Route>
+        <Route exact path='/' element={loggedState != 'loggedOut' ? <div style={{backgroundColor:'rgb(255,227,148)',overflowX:isMobile ?'hidden' : null}}><img src={Logo} style={{marginLeft:isMobile ? '30%' : '43%',borderRadius:'70%'}} width={isMobile ? "30%" : "10%"} /><HeaderTabs isMobile={isMobile} isAdmin={isAdmin} /></div> :  <SignIn hashedPassAdmin={hashedPassAdmin} isMobile={isMobile} hashedPassNormal={hashedPassNormal} />}></Route>
+        {/* <Route exact path='/' element={<Disabled />}></Route> */}
         <Route exact path='/invoice' element={<InvoiceTemplate />}></Route>
         <Route exact path='/paymentrc' element={<PaymentReceiptTemplate />}></Route>
         <Route exact path='/supporting' element={<SupportingListTemplate />}></Route>
