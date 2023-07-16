@@ -165,7 +165,7 @@ const CreateJob = ({
       vehicleIn: vehicleIn,
       vehicleOut: vehicleOut,
       transport: transport,
-      jobDate: jobDate === null || isNaN(jobDate.$D) ? (editJob ? rowData.doVal : "") : (jobDate.$D+"-"+(jobDate.$M+1)+"-"+jobDate.$y),
+      jobDate: jobDate === null || isNaN(jobDate.$D) ? (editJob ? rowData.jobDate : "") : (jobDate.$D+"-"+(jobDate.$M+1)+"-"+jobDate.$y),
       doVal: doValue === null || isNaN(doValue.$D) ? (editJob ? rowData.doVal : "") : (doValue.$D+"-"+(doValue.$M+1)+"-"+doValue.$y),
       storage: storage === null || isNaN(storage.$D) ? (editJob ? rowData.storage : "") : storage.$D+"-"+(storage.$M+1)+"-"+storage.$y,
       containerSize: containerSize,
