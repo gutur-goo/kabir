@@ -102,7 +102,7 @@ const {
   invoiceNo='',
   customerAddress='',
   grossAmountInWords= '',
-} = JSON.parse(localStorage.getItem('invoice_data'));
+} = JSON.parse(localStorage.getItem('invoice_data')) || {};
 
 localStorage.removeItem('invoice_data');
 
@@ -133,7 +133,7 @@ localStorage.removeItem('invoice_data');
   };
 
   useEffect(() => {
-    handleDownload();
+    // handleDownload();
     // const timeout = setTimeout(() => {
     //   window.close();
     // },1000);
@@ -142,10 +142,19 @@ localStorage.removeItem('invoice_data');
 
   return (
     <div class="invoice-box" id="html-content">
-      <img src={Header} style={{width:'100%'}} />
-      <h1 style={{display:'flex',justifyContent:'center',marginBottom:30,marginTop:30}}>TAX INVOICE</h1>
+      <img src={Header} style={{ width: "100%" }} />
+      <h1
+        style={{
+          display: "flex",
+          justifyContent: "center",
+          marginBottom: 30,
+          marginTop: 30,
+        }}
+      >
+        TAX INVOICE
+      </h1>
       <div style={{ display: "flex", justifyContent: "space-between" }}>
-        <div style={{ marginLeft: 30 }}>
+        {/* <div style={{ marginLeft: 30 }}>
           <p>
             <b>Customer :</b>{" "}
             <span
@@ -176,76 +185,122 @@ localStorage.removeItem('invoice_data');
             <b>Kabir TRN : </b>
             {`100451512600003`}
           </p>
-        </div>
+        </div> */}
+        <table style={{borderWidth:0}}>
+          <tr>
+            <th style={{borderWidth:0,textAlign:'left'}}>Customer </th>
+            <th style={{borderWidth:0,textAlign:'left'}}> : </th>
+            <td style={{borderWidth:0,textAlign:'left'}}>{customer} </td>
+          </tr>
+          <tr>
+            <th style={{borderWidth:0,textAlign:'left'}}>Address </th>
+            <th style={{borderWidth:0,textAlign:'left'}}> : </th>
+            <td style={{borderWidth:0,textAlign:'left'}}>{customerAddress}</td>
+          </tr>
+          <tr>
+            <th style={{borderWidth:0,textAlign:'left',width:'40%',lineHeight:1}}>Customer TRN </th>
+            <th style={{borderWidth:0,textAlign:'left'}}> : </th>
+            <td style={{borderWidth:0,textAlign:'left'}}>{customerTRN}</td>
+          </tr>
+        </table>
+        <table style={{borderWidth:0}}>
+          <tr>
+            <th style={{borderWidth:0,textAlign:'left'}}>Invoice Date </th>
+            <th style={{borderWidth:0,textAlign:'left'}}> : </th>
+            <td style={{borderWidth:0,textAlign:'left'}}>{invoiceDate} </td>
+          </tr>
+          <tr>
+            <th style={{borderWidth:0,textAlign:'left',width:'40%',lineHeight:1}}>Invoice Number </th>
+            <th style={{borderWidth:0,textAlign:'left'}}> : </th>
+            <td style={{borderWidth:0,textAlign:'left'}}>{invoiceNo}</td>
+          </tr>
+          <tr>
+            <th style={{borderWidth:0,textAlign:'left'}}>Kabir TRN </th>
+            <th style={{borderWidth:0,textAlign:'left'}}> : </th>
+            <td style={{borderWidth:0,textAlign:'left'}}>{`100451512600003`}</td>
+          </tr>
+        </table>
       </div>
       <table style={{ width: "100%", marginTop: 30, textAlign: "center" }}>
         <tr>
-          <th>SI.No</th>
-          <th>Description</th>
-          <th>Qty</th>
-          <th>Rate</th>
-          <th>VAT %</th>
-          <th>Total VAT</th>
-          <th>Total Amount</th>
+          <th style={{textAlign:'left',paddingLeft:10}}>SI.No</th>
+          <th style={{textAlign:'left',paddingLeft:10}}>Description</th>
+          <th style={{textAlign:'left',paddingLeft:10}}>Qty</th>
+          <th style={{textAlign:'left',paddingLeft:10}}>Rate</th>
+          <th style={{textAlign:'left',paddingLeft:10}}>VAT %</th>
+          <th style={{textAlign:'left',paddingLeft:10}}>Total VAT</th>
+          <th style={{textAlign:'left',paddingLeft:10}}>Total Amount</th>
         </tr>
         {rowData.map((item, index) => {
-			// invoiceAmount = invoiceAmount + parseInt(item.Rate)*parseInt(item.Qty);
-			// taxableValue = taxableValue + (item.VAT == '5' ? parseInt(item.Rate)*parseInt(item.Qty) : 0) 
-			// const vat = item.VAT == '0' ? 0 : (parseInt(item.Rate) * 0.05);
-			// VATAmount = VATAmount + (vat*parseInt(item.Qty));
-			// const total = (parseInt(item.Rate)*parseInt(item.Qty)) + (item.VAT == '0' ? 0 : (parseInt(item.Rate) * 0.05)*parseInt(item.Qty));
-			// grossAmount = grossAmount + total;
-			return (
+          // invoiceAmount = invoiceAmount + parseInt(item.Rate)*parseInt(item.Qty);
+          // taxableValue = taxableValue + (item.VAT == '5' ? parseInt(item.Rate)*parseInt(item.Qty) : 0)
+          // const vat = item.VAT == '0' ? 0 : (parseInt(item.Rate) * 0.05);
+          // VATAmount = VATAmount + (vat*parseInt(item.Qty));
+          // const total = (parseInt(item.Rate)*parseInt(item.Qty)) + (item.VAT == '0' ? 0 : (parseInt(item.Rate) * 0.05)*parseInt(item.Qty));
+          // grossAmount = grossAmount + total;
+          return (
             <tr>
-              <td>{index+1}</td>
-              <td>{item.description}</td>
-              <td>{item.quantity}</td>
-              <td>{item.rate}</td>
-              <td>{item['vat%']}</td>
-              <td>{item.totalVat}</td>
-              <td>{item.totalAmount}</td>
+              <td style={{textAlign:'left',paddingLeft:10}}>{index + 1}</td>
+              <td style={{textAlign:'left',paddingLeft:10}}>{item.description}</td>
+              <td style={{textAlign:'left',paddingLeft:10}}>{item.quantity}</td>
+              <td style={{textAlign:'left',paddingLeft:10}}>{item.rate}</td>
+              <td style={{textAlign:'left',paddingLeft:10}}>{item["vat%"]}</td>
+              <td style={{textAlign:'left',paddingLeft:10}}>{item.totalVat}</td>
+              <td style={{textAlign:'left',paddingLeft:10}}>{item.totalAmount}</td>
             </tr>
           );
         })}
-		<tr>
-              <td>{''}</td>
-              <td>{''}</td>
-              <td>{''}</td>
-              <td>{''}</td>
-              <td>{''}</td>
-              <td>{`Invoice Amount`}</td>
-              <td><b>{invoiceAmount}</b></td>
-            </tr>
-			<tr>
-              <td>{''}</td>
-              <td>{''}</td>
-              <td>{''}</td>
-              <td>{''}</td>
-              <td>{''}</td>
-              <td>{`Taxable Value`}</td>
-              <td><b>{taxableValue}</b></td>
-            </tr>
-			<tr>
-              <td>{''}</td>
-              <td>{''}</td>
-              <td>{''}</td>
-              <td>{''}</td>
-              <td>{''}</td>
-              <td>{`VAT Amount`}</td>
-              <td><b>{totalVatAmount}</b></td>
-            </tr>
-			<tr>
-              <td>{''}</td>
-              <td>{''}</td>
-              <td>{''}</td>
-              <td>{''}</td>
-              <td>{''}</td>
-              <td><b>{`Gross Amount`}</b></td>
-              <td><b>{`AED ${grossAmount}`}</b></td>
-            </tr>
+        <tr>
+          <td style={{textAlign:'left',paddingLeft:10}}>{""}</td>
+          <td style={{textAlign:'left',paddingLeft:10}}>{""}</td>
+          <td style={{textAlign:'left',paddingLeft:10}}>{""}</td>
+          <td style={{textAlign:'left',paddingLeft:10}}>{""}</td>
+          <td style={{textAlign:'left',paddingLeft:10}}>{""}</td>
+          <td style={{textAlign:'left',paddingLeft:10}}>{`Invoice Amount`}</td>
+          <td style={{textAlign:'left',paddingLeft:10}}>
+            <b>{invoiceAmount}</b>
+          </td>
+        </tr>
+        <tr>
+          <td style={{textAlign:'left',paddingLeft:10}}>{""}</td>
+          <td style={{textAlign:'left',paddingLeft:10}}>{""}</td>
+          <td style={{textAlign:'left',paddingLeft:10}}>{""}</td>
+          <td style={{textAlign:'left',paddingLeft:10}}>{""}</td>
+          <td style={{textAlign:'left',paddingLeft:10}}>{""}</td>
+          <td style={{textAlign:'left',paddingLeft:10}}>{`Taxable Value`}</td>
+          <td style={{textAlign:'left',paddingLeft:10}}>
+            <b>{taxableValue}</b>
+          </td>
+        </tr>
+        <tr>
+          <td style={{textAlign:'left',paddingLeft:10}}>{""}</td>
+          <td style={{textAlign:'left',paddingLeft:10}}>{""}</td>
+          <td style={{textAlign:'left',paddingLeft:10}}>{""}</td>
+          <td style={{textAlign:'left',paddingLeft:10}}>{""}</td>
+          <td style={{textAlign:'left',paddingLeft:10}}>{""}</td>
+          <td style={{textAlign:'left',paddingLeft:10}}>{`VAT Amount`}</td>
+          <td style={{textAlign:'left',paddingLeft:10}}>
+            <b>{totalVatAmount}</b>
+          </td>
+        </tr>
+        <tr>
+          <td style={{textAlign:'left',paddingLeft:10}}>{""}</td>
+          <td style={{textAlign:'left',paddingLeft:10}}>{""}</td>
+          <td style={{textAlign:'left',paddingLeft:10}}>{""}</td>
+          <td style={{textAlign:'left',paddingLeft:10}}>{""}</td>
+          <td style={{textAlign:'left',paddingLeft:10}}>{""}</td>
+          <td style={{textAlign:'left',paddingLeft:10}}>
+            <b>{`Gross Amount`}</b>
+          </td>
+          <td style={{textAlign:'left',paddingLeft:10}}>
+            <b>{`AED ${grossAmount}`}</b>
+          </td>
+        </tr>
       </table>
-	  <p style={{marginTop:20}}>{`Amount in words : ${grossAmountInWords}`}</p>
-      <img src={Footer} style={{ marginTop:70,width:'100%' }} />
+      <p
+        style={{ marginTop: 20 }}
+      >{`Amount in words : ${grossAmountInWords}`}</p>
+      <img src={Footer} style={{ marginTop: 70, width: "100%" }} />
     </div>
   );
 };

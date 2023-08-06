@@ -68,6 +68,18 @@ const AllJobs = ({isMobile = false}) => {
       <h1 style={{ display: "flex", justifyContent: "center" }}>ALL JOBS</h1>
       <div style={{ height: window.innerHeight, width: "100%" }}>
         <DataGrid
+          columnVisibilityModel={{
+            // Hide columns status and traderName, the other columns will remain visible
+            jobTypeName: false,
+            remarks : false,
+            containerStatus : false,
+            detention : false,
+            transporterName : false,
+            doVal : false,
+            storage : false,
+            containerSize : false
+            // traderName: false,
+          }}
           onRowClick={handleRowClick}
           rows={jobsData}
           getRowId={(row) => row.jobId}
