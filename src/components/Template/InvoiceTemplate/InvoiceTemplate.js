@@ -133,7 +133,7 @@ localStorage.removeItem('invoice_data');
   };
 
   useEffect(() => {
-    // handleDownload();
+    handleDownload();
     // const timeout = setTimeout(() => {
     //   window.close();
     // },1000);
@@ -195,10 +195,10 @@ localStorage.removeItem('invoice_data');
           <tr>
             <th style={{borderWidth:0,textAlign:'left'}}>Address </th>
             <th style={{borderWidth:0,textAlign:'left'}}> : </th>
-            <td style={{borderWidth:0,textAlign:'left'}}>{customerAddress}</td>
+            <td style={{borderWidth:0,textAlign:'left',width:'77%',lineHeight:1}}>{customerAddress}</td>
           </tr>
           <tr>
-            <th style={{borderWidth:0,textAlign:'left',width:'40%',lineHeight:1}}>Customer TRN </th>
+            <th style={{borderWidth:0,textAlign:'left'}}>Customer TRN </th>
             <th style={{borderWidth:0,textAlign:'left'}}> : </th>
             <td style={{borderWidth:0,textAlign:'left'}}>{customerTRN}</td>
           </tr>
